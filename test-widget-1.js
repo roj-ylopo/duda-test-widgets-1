@@ -174,5 +174,5 @@
     }
   }
 
-  dmAPI.registerExternalWidget('searchWidget', handler)
+  dmAPI.registerExternalWidget('chart', handler)
 })();
