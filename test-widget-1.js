@@ -6,7 +6,7 @@
     console.log('props:', props);
     // Create main container
     container.style.fontFamily = 'sans-serif';
-    container.style.maxWidth = '400px';
+    container.style.maxWidth = '1000px';
     container.style.padding = '16px';
     container.style.border = '1px solid #ccc';
     container.style.borderRadius = '8px';
