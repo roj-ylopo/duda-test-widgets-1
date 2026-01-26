@@ -151,7 +151,7 @@
     };
 
     // Assemble everything
-    container.appendChild(searchRow) : null;
+    container.appendChild(searchRow);
     container.appendChild(radioRow);
     propertyTypeDropdown ? container.appendChild(propertyTypeDropdown) : null;
     minPriceDropdown ? container.appendChild(minPriceDropdown) : null;
