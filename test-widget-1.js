@@ -1,5 +1,7 @@
 (function() {
-  function createSearchBar(container) {
+  function createSearchBar(options) {
+    console.log('options:', options);
+    const container = options.container;
     // Create main container
     container.style.fontFamily = 'sans-serif';
     container.style.maxWidth = '400px';
@@ -165,8 +167,7 @@
     // these methods must be named init and clean
 
     init: function(options){
-      console.log('options:', options);
-      createSearchBar(options.container);
+      createSearchBar(options);
     },
 
     clean: function(options) {
