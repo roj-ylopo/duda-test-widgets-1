@@ -1,12 +1,9 @@
 (function() {
-  function createSearchBar(options) {
-    const {container, props} = options;
-    const {bathsSelector, bedsSelector, currencyLanguage, priceSelector, propertyTypeSelector, searchSettings, sqftSelector} = props;
-        
-    console.log('props:', props);
+  function createSearchBar() {
     // Create main container
+    const container = document.createElement('div');
     container.style.fontFamily = 'sans-serif';
-    container.style.maxWidth = '1000px';
+    container.style.maxWidth = '400px';
     container.style.padding = '16px';
     container.style.border = '1px solid #ccc';
     container.style.borderRadius = '8px';
@@ -121,13 +118,13 @@
       { value: '4', label: '4+' }
     ];
 
-    const propertyTypeDropdown = propertyTypeSelector ? createDropdown('Property Type', propertyTypes) : null;
-    const minPriceDropdown = priceSelector ? createDropdown('Min Price', priceOptions) : null;
-    const maxPriceDropdown = priceSelector ? createDropdown('Max Price', priceOptions) : null;
-    const minSqftDropdown = sqftSelector ? createDropdown('Min Sq Ft', sqftOptions) : null;
-    const maxSqftDropdown = sqftSelector ? createDropdown('Max Sq Ft', sqftOptions) : null;
-    const bedsDropdown = bedsSelector ? createDropdown('Beds', bedBathOptions) : null;
-    const bathsDropdown = bathsSelector ? createDropdown('Baths', bedBathOptions) : null;
+    const propertyTypeDropdown = createDropdown('Property Type', propertyTypes);
+    const minPriceDropdown = createDropdown('Min Price', priceOptions);
+    const maxPriceDropdown = createDropdown('Max Price', priceOptions);
+    const minSqftDropdown = createDropdown('Min Sq Ft', sqftOptions);
+    const maxSqftDropdown = createDropdown('Max Sq Ft', sqftOptions);
+    const bedsDropdown = createDropdown('Beds', bedBathOptions);
+    const bathsDropdown = createDropdown('Baths', bedBathOptions);
 
     // Clear button
     const clearBtn = document.createElement('button');
@@ -153,13 +150,13 @@
     // Assemble everything
     container.appendChild(searchRow);
     container.appendChild(radioRow);
-    propertyTypeDropdown ? container.appendChild(propertyTypeDropdown) : null;
-    minPriceDropdown ? container.appendChild(minPriceDropdown) : null;
-    maxPriceDropdown ? container.appendChild(maxPriceDropdown) : null;
-    minSqftDropdown ? container.appendChild(minSqftDropdown) : null;
-    maxSqftDropdown ? container.appendChild(maxSqftDropdown) : null;
-    bedsDropdown ? container.appendChild(bedsDropdown) : null;
-    bathsDropdown ? container.appendChild(bathsDropdown) : null;
+    container.appendChild(propertyTypeDropdown);
+    container.appendChild(minPriceDropdown);
+    container.appendChild(maxPriceDropdown);
+    container.appendChild(minSqftDropdown);
+    container.appendChild(maxSqftDropdown);
+    container.appendChild(bedsDropdown);
+    container.appendChild(bathsDropdown);
     container.appendChild(clearBtn);
 
     // return container;
@@ -177,5 +174,5 @@
     }
   }
 
-  dmAPI.registerExternalWidget('chart', handler)
+  dmAPI.registerExternalWidget('searchWidget', handler)
 })();
