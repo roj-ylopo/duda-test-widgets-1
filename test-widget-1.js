@@ -153,13 +153,13 @@
     // Assemble everything
     container.appendChild(searchRow);
     container.appendChild(radioRow);
-    container.appendChild(propertyTypeDropdown);
-    container.appendChild(minPriceDropdown);
-    container.appendChild(maxPriceDropdown);
-    container.appendChild(minSqftDropdown);
-    container.appendChild(maxSqftDropdown);
-    container.appendChild(bedsDropdown);
-    container.appendChild(bathsDropdown);
+    propertyTypeDropdown ? container.appendChild(propertyTypeDropdown) : null;
+    minPriceDropdown ? container.appendChild(minPriceDropdown) : null;
+    maxPriceDropdown ? container.appendChild(maxPriceDropdown) : null;
+    minSqftDropdown ? container.appendChild(minSqftDropdown) : null;
+    maxSqftDropdown ? container.appendChild(maxSqftDropdown) : null;
+    bedsDropdown ? container.appendChild(bedsDropdown) : null;
+    bathsDropdown ? container.appendChild(bathsDropdown) : null;
     container.appendChild(clearBtn);
 
     // return container;
