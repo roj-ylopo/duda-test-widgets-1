@@ -1,0 +1,34 @@
+.search-widget-container {
+  font-family: sans-serif;
+  max-width: 1000px;
+  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.search-row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.search-type-radio-row {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dropdown-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+  justify-content: space-between;
+}
+
+.search-widget-container button,
+.search-widget-container select,
+.search-widget-container input[type="text"] {
+  padding: 8px;
+}

@@ -5,28 +5,30 @@
         
     console.log('props:', props);
     // Create main container
-    container.style.fontFamily = 'sans-serif';
-    container.style.maxWidth = '1000px';
-    container.style.padding = '16px';
-    container.style.border = '1px solid #ccc';
-    container.style.borderRadius = '8px';
-    container.style.background = '#fafafa';
+    // container.style.fontFamily = 'sans-serif';
+    // container.style.maxWidth = '1000px';
+    // container.style.padding = '16px';
+    // container.style.border = '1px solid #ccc';
+    // container.style.borderRadius = '8px';
+    // container.style.background = '#fafafa';
+    container.className = 'search-widget-container';
 
     // Search input and button
     const searchRow = document.createElement('div');
-    searchRow.style.display = 'flex';
-    searchRow.style.marginBottom = '12px';
+    // searchRow.style.display = 'flex';
+    // searchRow.style.marginBottom = '12px';
+    searchRow.className = 'search-row';
 
     const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.placeholder = 'Search...';
-    searchInput.style.flex = '1';
-    searchInput.style.padding = '8px';
+    // searchInput.type = 'text';
+    // searchInput.placeholder = 'Search...';
+    // searchInput.style.flex = '1';
+    // searchInput.style.padding = '8px';
 
     const searchBtn = document.createElement('button');
-    searchBtn.textContent = 'Search';
-    searchBtn.style.marginLeft = '8px';
-    searchBtn.style.padding = '8px 16px';
+    // searchBtn.textContent = 'Search';
+    // searchBtn.style.marginLeft = '8px';
+    // searchBtn.style.padding = '8px 16px';
 
     searchRow.appendChild(searchInput);
     searchRow.appendChild(searchBtn);
@@ -34,6 +36,8 @@
     // Radio buttons
     const radioRow = document.createElement('div');
     radioRow.style.marginBottom = '12px';
+    radioRow.className = 'search-type-radio-row';
+    
 
     const areaRadio = document.createElement('input');
     areaRadio.type = 'radio';
@@ -164,11 +168,20 @@
 
     // return container;
   }
+  function loadExternalCSS(href) {
+  if (!document.querySelector(`link[href="${href}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
+}
 
   var handler = {
     // these methods must be named init and clean
 
     init: function(options){
+      loadExternalCSS('/test-widget-1.css');
       createSearchBar(options);
     },
 
