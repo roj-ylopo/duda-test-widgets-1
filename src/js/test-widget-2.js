@@ -31,7 +31,6 @@
           <div class="search-config-field propertyTypeSelector">
           </div>
         </div>
-        <div class="
       </div>
       <div class="mobile-expand">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="48 80 416 352"><path fill="#000000" d="M381.3 112a48 48 0 0 0-90.6 0H48v32h242.8a48 48 0 0 0 90.4 0H464v-32ZM176 208a48 48 0 0 0-45.3 32H48v32h82.8a48 48 0 0 0 90.4 0H464v-32H221.2a48 48 0 0 0-45.2-32Zm160 128a48 48 0 0 0-45.3 32H48v32h242.8a48 48 0 0 0 90.4 0H464v-32h-82.8a48 48 0 0 0-45.2-32Z"/></svg>		
