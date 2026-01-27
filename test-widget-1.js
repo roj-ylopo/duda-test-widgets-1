@@ -181,7 +181,7 @@
     // these methods must be named init and clean
 
     init: function(options){
-      loadExternalCSS('/test-widget-1.css');
+      loadExternalCSS('https://roj-ylopo.github.io/duda-test-widgets-1/test-widget-1.css');
       createSearchBar(options);
     },
 
