@@ -36,7 +36,7 @@
 
     // Radio buttons
     const radioRow = document.createElement('div');
-    radioRow.style.marginBottom = '12px';
+    // radioRow.style.marginBottom = '12px';
     radioRow.className = 'search-type-radio-row';
     
 
@@ -50,7 +50,7 @@
     const areaLabel = document.createElement('label');
     areaLabel.htmlFor = 'search-area';
     areaLabel.textContent = 'Search by Area';
-    areaLabel.style.marginRight = '16px';
+    // areaLabel.style.marginRight = '16px';
 
     const addressRadio = document.createElement('input');
     addressRadio.type = 'radio';
@@ -70,16 +70,16 @@
     // Dropdowns
     function createDropdown(labelText, optionsArr) {
       const wrapper = document.createElement('div');
-      wrapper.style.marginBottom = '8px';
+      // wrapper.style.marginBottom = '8px';
 
       const label = document.createElement('label');
       label.textContent = labelText;
-      label.style.display = 'block';
-      label.style.marginBottom = '2px';
+      // label.style.display = 'block';
+      // label.style.marginBottom = '2px';
 
       const select = document.createElement('select');
-      select.style.width = '100%';
-      select.style.padding = '6px';
+      // select.style.width = '100%';
+      // select.style.padding = '6px';
 
       optionsArr.forEach(opt => {
         const option = document.createElement('option');
@@ -137,9 +137,9 @@
     // Clear button
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Clear';
-    clearBtn.style.marginTop = '12px';
-    clearBtn.style.width = '100%';
-    clearBtn.style.padding = '8px';
+    // clearBtn.style.marginTop = '12px';
+    // clearBtn.style.width = '100%';
+    // clearBtn.style.padding = '8px';
 
     // Clear functionality
     clearBtn.onclick = function() {
