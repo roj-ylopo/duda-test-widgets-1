@@ -1,4 +1,3 @@
-// generate a generic package.json file
 {
   "name": "duda-test-widgets",
   "version": "1.0.0",
