@@ -110,9 +110,88 @@
           <option value="1000000">$1,000,000</option>
         </select>
       </div>`);
-    $v5SearchWidget.find('#search-filters').append($minPriceSelector);
-    $v5SearchWidget.find('#search-filters').append($maxPriceSelector);
-    $v5SearchWidget.find('#search-filters .propertyTypeSelector').append($propertyTypeSelector);
+
+    const $minSqftSelector = $(`
+      <div class="search-config-field sqftSelector">
+        <label class="ylopo-hidden-label" for="min-sqft">Min Sqft</label>
+        <select id="min-sqft" class="search-config-item">
+          <option value="">Min Sqft</option>
+          <option value="200">200 sqft</option>
+          <option value="400">400 sqft</option>
+          <option value="600">600 sqft</option>
+          <option value="800">800 sqft</option>
+          <option value="1000">1,000 sqft</option>
+          <option value="1200">1,200 sqft</option>
+          <option value="1400">1,400 sqft</option>
+          <option value="1600">1,600 sqft</option>
+          <option value="1800">1,800 sqft</option>
+          <option value="2000">2,000 sqft</option>
+        </select>
+      </div>`);
+
+    const $maxSqftSelector = $(`
+      <div class="search-config-field sqftSelector">
+        <label class="ylopo-hidden-label" for="max-sqft">Max Sqft</label>
+        <select id="max-sqft" class="search-config-item">
+          <option value="">Max Sqft</option>
+          <option value="2000">2,000 sqft</option>
+          <option value="4000">4,000 sqft</option>
+          <option value="6000">6,000 sqft</option>
+          <option value="8000">8,000 sqft</option>
+          <option value="10000">10,000 sqft</option>
+          <option value="12000">12,000 sqft</option>
+          <option value="14000">14,000 sqft</option>
+          <option value="16000">16,000 sqft</option>
+          <option value="18000">18,000 sqft</option>
+          <option value="20000">20,000 sqft</option>
+        </select>
+      </div>`);
+
+    const $bedsSelector = $(`
+      <div class="search-config-field bedsSelector">
+        <label class="ylopo-hidden-label" for="beds">Beds</label>
+        <select id="beds" class="search-config-item">
+          <option value="">Beds</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+        </select>
+      </div>`);
+
+    const $bathsSelector = $(`
+      <div class="search-config-field bathsSelector">
+        <label class="ylopo-hidden-label" for="baths">Baths</label>
+        <select id="baths" class="search-config-item">
+          <option value="">Baths</option>
+          <option value="1">1+</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+        </select>
+      </div>`);
+
+    if(propertyTypeSelector){
+      $v5SearchWidget.find('#search-filters .propertyTypeSelector').append($propertyTypeSelector);
+    }
+    if(priceSelector){
+      $v5SearchWidget.find('#search-filters').append($minPriceSelector);
+      $v5SearchWidget.find('#search-filters').append($maxPriceSelector);
+    }
+    if (sqftSelector) {
+      $v5SearchWidget.find('#search-filters').append($minSqftSelector);
+      $v5SearchWidget.find('#search-filters').append($maxSqftSelector);
+    }
+    if (bedsSelector){
+      $v5SearchWidget.find('#search-filters').append($bedsSelector);
+    }
+    if (bathsSelector){
+      $v5SearchWidget.find('#search-filters').append($bathsSelector);
+    }
     $v5SearchWidget.appendTo(container);
   }
   function loadExternalCSS(href) {
