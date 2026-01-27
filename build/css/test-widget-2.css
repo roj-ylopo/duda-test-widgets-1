@@ -1,0 +1,408 @@
+.v5-search {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  background: #ffffff;
+  width: auto;
+  position: relative;
+}
+.v5-search .search-config-button {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  flex-direction: row;
+  font-size: 14px;
+  line-height: 14px;
+  position: absolute;
+  top: 3px;
+  left: -6px;
+  padding: 5px;
+  cursor: pointer;
+  border: 2px dashed #0f0;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.7);
+  transform: translate(-100%, 0);
+}
+.v5-search .search-config-button svg {
+  width: 48px;
+  height: 48px;
+  pointer-events: bounding-box;
+}
+.v5-search input#search-listings-input {
+  width: 100%;
+  border: 0px;
+  border-bottom: 1px solid gray;
+  padding: 10px;
+  font-size: 1.2em;
+  line-height: 1.2em;
+}
+.v5-search div.sqft {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+}
+.v5-search div.sqft input.sqft-input {
+  width: 70px;
+  margin-right: 2px;
+}
+.v5-search div.sqft input::-webkit-outer-spin-button,
+.v5-search div.sqft input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.v5-search div.price {
+  display: flex;
+  flex-direction: row;
+  padding: 4px;
+}
+.v5-search #search-filters {
+  overflow: visible;
+  display: flex;
+  flex-wrap: wrap;
+}
+.v5-search select {
+  color: gray;
+}
+.v5-search .search-button {
+  width: 31px;
+  height: 31px;
+  padding: 5px 5px 0 5px;
+  background: #636363;
+  border: 0px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.v5-search .search-button svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  margin: 2px auto;
+}
+.v5-search .suggested-listings-loading {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  top: 100%;
+  left: 0px;
+  min-width: 160px;
+  max-width: 700px;
+  max-height: 150px;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  text-align: center;
+}
+.v5-search .suggested-listings-loading h4 {
+  color: #222222;
+  display: block;
+  padding-left: 5px;
+}
+.v5-search .suggested-listings-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  top: calc(20px + 1.2em);
+  left: 0px;
+  min-width: 160px;
+  max-width: 700px;
+  max-height: 150px;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  overflow: auto;
+}
+.v5-search .suggested-listings-content a {
+  color: #222222;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.v5-search .suggested-listings-content h4 {
+  color: #222222;
+  display: block;
+  padding-left: 5px;
+}
+.v5-search .grouped-location-autocomplete-suggestion-empty {
+  color: #222222;
+  display: block;
+  padding-left: 5px;
+}
+.v5-search .suggested-listings-content a:hover {
+  background-color: #ddd;
+}
+.v5-search label.ylopo-hidden-label {
+  position: absolute;
+  top: -100vw;
+  left: 0;
+}
+.v5-search .search-input-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  position: relative;
+}
+.v5-search .search-input-container input[type=text] {
+  width: 100%;
+  border: 0px;
+  border-bottom: 1px solid gray;
+  padding: 10px;
+}
+.v5-search #search-filters-editor,
+.v5-search #search-filters {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+  flex-flow: nowrap;
+}
+.v5-search #search-filters-editor .clear-filters,
+.v5-search #search-filters .clear-filters {
+  cursor: pointer;
+}
+.v5-search #search-filters-editor .beds-bath-div,
+.v5-search #search-filters .beds-bath-div {
+  display: flex;
+  flex-direction: row;
+}
+.v5-search #search-filters-editor .beds-bath-div select,
+.v5-search #search-filters .beds-bath-div select {
+  margin: 0 3px;
+}
+.v5-search #search-filters-editor *,
+.v5-search #search-filters * {
+  color: black;
+}
+.v5-search #search-filters-editor input,
+.v5-search #search-filters input,
+.v5-search #search-filters-editor select,
+.v5-search #search-filters select,
+.v5-search #search-filters-editor .property-types-btn,
+.v5-search #search-filters .property-types-btn {
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 3px;
+  height: 1.2em;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  font-family: inherit;
+}
+.v5-search #search-filters-editor input *,
+.v5-search #search-filters input *,
+.v5-search #search-filters-editor select *,
+.v5-search #search-filters select *,
+.v5-search #search-filters-editor .property-types-btn *,
+.v5-search #search-filters .property-types-btn * {
+  font-size: 14px;
+  line-height: 16px;
+  font-family: inherit;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown,
+.v5-search #search-filters .search-config-field .dropdown {
+  position: relative;
+  display: inline-block;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown .property-types-btn,
+.v5-search #search-filters .search-config-field .dropdown .property-types-btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 1px 4px;
+  border: 1px solid black;
+  border-radius: 3px;
+  cursor: pointer;
+  text-align: center;
+  width: max-content;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown .property-types-btn svg,
+.v5-search #search-filters .search-config-field .dropdown .property-types-btn svg {
+  padding-left: 4px;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown .dropdown-content,
+.v5-search #search-filters .search-config-field .dropdown .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  width: max-content;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown .dropdown-content label,
+.v5-search #search-filters .search-config-field .dropdown .dropdown-content label,
+.v5-search #search-filters-editor .search-config-field .dropdown .dropdown-content input,
+.v5-search #search-filters .search-config-field .dropdown .dropdown-content input {
+  display: block;
+  padding: 7px 6px;
+  cursor: pointer;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown .dropdown-content .dropdown-item,
+.v5-search #search-filters .search-config-field .dropdown .dropdown-content .dropdown-item {
+  display: flex;
+  flex-direction: row;
+}
+.v5-search #search-filters-editor .search-config-field .dropdown-item:hover,
+.v5-search #search-filters .search-config-field .dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+.v5-search #search-filters-editor .priceSelector,
+.v5-search #search-filters-editor .sqft,
+.v5-search #search-filters-editor .propertyTypeSelector {
+  padding: 0px;
+}
+.v5-search #search-filters-editor .priceSelector input,
+.v5-search #search-filters-editor .sqft input,
+.v5-search #search-filters-editor .propertyTypeSelector input,
+.v5-search #search-filters-editor .priceSelector select,
+.v5-search #search-filters-editor .sqft select,
+.v5-search #search-filters-editor .propertyTypeSelector select,
+.v5-search #search-filters-editor .priceSelector .property-types-btn,
+.v5-search #search-filters-editor .sqft .property-types-btn,
+.v5-search #search-filters-editor .propertyTypeSelector .property-types-btn {
+  margin: 0px 3px;
+}
+@media only screen and (max-width: 768px) {
+  .v5-search {
+    position: static;
+    height: min-content;
+  }
+  .v5-search #search-filters {
+    display: none;
+    flex-direction: column;
+    overflow: visible;
+  }
+  .v5-search #search-filters > * {
+    margin-top: 5px;
+  }
+  .v5-search #search-filters .form-field.price.priceSelector,
+  .v5-search #search-filters .form-field.sqft,
+  .v5-search #search-filters .beds-bath-div {
+    padding: 0;
+    width: 100%;
+  }
+  .v5-search #search-filters .form-field.price.priceSelector select,
+  .v5-search #search-filters .form-field.sqft select,
+  .v5-search #search-filters .beds-bath-div select,
+  .v5-search #search-filters .form-field.price.priceSelector input,
+  .v5-search #search-filters .form-field.sqft input,
+  .v5-search #search-filters .beds-bath-div input {
+    width: 50%;
+    height: 48px;
+    margin: 0;
+  }
+  .v5-search #search-filters .form-field.price.priceSelector .form-field,
+  .v5-search #search-filters .form-field.sqft .form-field,
+  .v5-search #search-filters .beds-bath-div .form-field {
+    width: 50%;
+  }
+  .v5-search #search-filters .form-field.price.priceSelector .form-field select,
+  .v5-search #search-filters .form-field.sqft .form-field select,
+  .v5-search #search-filters .beds-bath-div .form-field select,
+  .v5-search #search-filters .form-field.price.priceSelector .form-field input,
+  .v5-search #search-filters .form-field.sqft .form-field input,
+  .v5-search #search-filters .beds-bath-div .form-field input {
+    width: 100%;
+    height: 48px;
+    margin: 0;
+  }
+  .v5-search #search-filters .search-config-field.propertyTypeSelector {
+    padding-right: 10px;
+  }
+  .v5-search #search-filters .search-config-field.propertyTypeSelector #property-type {
+    width: 100%;
+  }
+  .v5-search #search-filters .search-config-field.propertyTypeSelector #property-type .property-types-btn {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .v5-search #search-filters .search-config-field.propertyTypeSelector #property-type .property-types-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .v5-search #search-filters .search-config-field.propertyTypeSelector #property-type .dropdown-content {
+    width: 100%;
+  }
+  .v5-search #search-filters .clear-filters {
+    margin: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+  .v5-search #search-filters .beds-bath-div.single-filter-item * {
+    width: 100%;
+  }
+  .v5-search .mobile-expand {
+    display: flex!important;
+    justify-content: space-around;
+    width: 100%;
+    cursor: pointer;
+    height: 48px;
+  }
+  .v5-search .mobile-expand svg {
+    display: block;
+    width: 48px;
+    height: 48px;
+  }
+}
+.v5-search .search-type-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5px;
+}
+@media only screen and (max-width: 768px) {
+  .v5-search .search-type-container {
+    justify-content: space-evenly;
+  }
+}
+.v5-search .search-type-container label {
+  user-select: none;
+  color: #222222;
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.25s linear;
+}
+.v5-search .search-type-container label:not(:last-child) {
+  margin-right: 20px;
+}
+.v5-search .search-type-container label span {
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+}
+.v5-search .search-type-container label input[type=radio] {
+  width: auto;
+  cursor: pointer;
+  margin: 0 0 0 5px;
+  width: 2em;
+  height: 2em;
+}
+@media only screen and (max-width: 768px) {
+  .v5-search .search-type-container label input[type=radio] {
+    width: 48px;
+    height: 48px;
+  }
+}
+.v5-search .search-type-container label:hover {
+  color: #000;
+}
+.v5-search .mobile-expand {
+  display: none;
+}

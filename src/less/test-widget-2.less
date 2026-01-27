@@ -1,0 +1,395 @@
+@tablet: ~"only screen and (max-width: 1440px)";
+@mobile: ~"only screen and (max-width: 768px)";
+@smallMobile: ~"only screen and (max-width:396px)";
+@smallMobileWidth: calc(100vw - 48px - 48px);
+@mainColor: #636363;
+@navColor: #ffffff;
+
+@text-color: #222222;;
+
+.v5-search {
+    display: flex;
+    justify-content: space-between;
+		flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    background: @navColor;
+		width: auto;
+		position: relative;
+
+    .search-config-button {
+      display: flex;
+      justify-content:end;
+      align-items: center;
+      flex-direction: row;
+      font-size: 14px;
+      line-height: 14px;
+			position: absolute;
+			top: 3px;
+			left: -6px;
+			padding: 5px;
+			cursor: pointer;
+			border: 2px dashed #0f0;
+			border-radius: 3px;
+			background-color: rgba(0,0,0,0.7);
+			transform: translate(-100%, 0);
+			svg {
+				width: 48px;
+				height: 48px;
+				pointer-events: bounding-box;
+			}
+		}
+    
+    input#search-listings-input {
+			width: 100%;
+			border: 0px;
+			border-bottom: 1px solid gray;
+			padding: 10px;
+			font-size: 1.2em;
+			line-height: 1.2em;
+    }
+
+		div.sqft {
+			display: flex;
+			flex-direction: row;
+      padding: 2px;
+      input.sqft-input {
+        width: 70px;
+				margin-right: 2px;
+      }
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+    }
+
+		div.price {
+			display: flex;
+			flex-direction: row;
+      padding: 4px;
+		}
+    
+		#search-filters{
+			overflow: visible;
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+    select {
+      color: gray;
+    }
+
+
+    .search-button {
+        width: 31px;
+        height: 31px;
+        padding: 5px 5px 0 5px;
+        background: @mainColor;
+        border: 0px;
+        cursor: pointer;
+        border-radius: 5px;
+				svg {
+					width: 22px;
+					height: 22px;
+					display: block;
+					margin: 2px auto;
+				}
+    }
+
+    .suggested-listings-loading {
+        display: none;
+        position: absolute;
+        background-color: @navColor;
+        top: 100%;
+				left: 0px;
+        min-width: 160px;
+        max-width: 700px;
+        max-height: 150px;
+        width: 100%;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        text-align: center;
+    }
+
+    .suggested-listings-loading h4 {
+        color: @text-color;
+        display: block;
+        padding-left: 5px;
+    }
+
+    .suggested-listings-content {
+        display: none;
+        position: absolute;
+        background-color: @navColor;
+        top: calc(20px + 1.2em);
+				left: 0px;
+        min-width: 160px;
+        max-width: 700px;
+        max-height: 150px;
+        width: 100%;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        overflow: auto;
+    }
+    .suggested-listings-content a {
+        color: @text-color;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .suggested-listings-content h4 {
+        color: @text-color;
+        display: block;
+        padding-left: 5px;
+    }
+
+    .grouped-location-autocomplete-suggestion-empty {
+        color: @text-color;
+        display: block;
+        padding-left: 5px;
+    }
+    .suggested-listings-content a:hover {background-color: #ddd;}
+
+		label.ylopo-hidden-label{
+			position: absolute;
+			top: -100vw;
+			left: 0;
+		}
+		.search-input-container {
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			position: relative;
+			input[type=text] {
+				width: 100%;
+				border: 0px;
+				border-bottom: 1px solid gray;
+				padding: 10px;
+			}
+		}
+    #search-filters-editor, #search-filters {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      padding-top: 2px;
+			flex-flow: nowrap;
+			.clear-filters {
+				cursor: pointer;
+			}
+			.beds-bath-div {
+				display: flex;
+				flex-direction: row;
+				select {
+					margin: 0 3px;
+				}
+			}
+			* {
+				color: black;
+			}
+			input, select, .property-types-btn {
+				box-sizing: border-box;
+				border: 1px solid black;
+				border-radius: 3px;
+				height: 1.2em;
+				font-size: 1.2em;
+				line-height: 1.2em;
+				font-family: inherit;
+				* {
+					font-size: 14px;
+					line-height: 16px;
+					font-family: inherit;	
+				}
+			}
+			.search-config-field {
+				.dropdown {
+					position: relative;
+					display: inline-block;
+
+					.property-types-btn {
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						padding: 1px 4px;
+						border: 1px solid black;
+						border-radius: 3px;
+						cursor: pointer;
+						text-align: center;
+						width: max-content;
+						user-select: none;
+						-webkit-user-select: none;
+						-ms-user-select: none;
+						
+						svg {
+							padding-left: 4px;
+						}
+					}
+
+					.dropdown-content {
+						display: none;
+						position: absolute;
+						background-color: #f9f9f9;
+						min-width: 160px;
+						box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+						z-index: 1;
+						width: max-content;
+
+						label, input {
+							display: block;
+							padding: 7px 6px;
+							cursor: pointer;
+						}
+
+						.dropdown-item {
+							display: flex;
+							flex-direction: row;
+						}
+					}
+				}
+	
+				.dropdown-item:hover {
+					background-color: #f1f1f1;
+				}	
+			}
+
+    }
+
+		#search-filters-editor {
+			.priceSelector, .sqft, .propertyTypeSelector {
+				padding: 0px;
+				input, select, .property-types-btn {
+					margin: 0px 3px;
+				}
+			}
+		}
+		@media @mobile {
+			position: static;
+			height: min-content;
+			#search-filters {
+				display: none;
+				flex-direction: column;
+				overflow: visible;
+				>* {
+					margin-top: 5px;
+				}
+				.form-field.price.priceSelector, .form-field.sqft, .beds-bath-div {
+					padding: 0;
+					width: 100%;
+					select, input {
+						width: 50%;
+						height: 48px;
+						margin: 0;
+					}
+					.form-field {
+						width:50%;
+						select, input {
+							width: 100%;
+							height: 48px;
+							margin: 0;
+						}
+	
+					}
+				}
+				.search-config-field.propertyTypeSelector {
+					padding-right: 10px;
+					#property-type{
+						width: 100%;
+						.property-types-btn {
+							width: 100%;
+							height: 48px;
+							display: flex;
+							justify-content: space-between;
+							align-items: center;
+
+							svg {
+								width: 18px;
+								height: 18px;
+							}
+						}
+						.dropdown-content {
+							width: 100%;
+						}
+					}
+				}
+				.clear-filters {
+					margin: 15px;
+					display: flex;
+					flex-direction: row;
+					justify-content: space-around;
+				}
+				.beds-bath-div.single-filter-item *{
+					width: 100%;
+				}
+			}
+			
+			.mobile-expand {
+				display: flex!important;
+				justify-content: space-around;
+				width: 100%;
+				cursor: pointer;
+				height: 48px;
+				svg {
+					display: block;
+					width: 48px;
+					height: 48px;
+				}
+			}
+		}
+
+		.search-type-container {
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			@media @mobile {
+				justify-content: space-evenly;
+			}
+			padding-top: 5px;
+			label {
+				user-select: none;
+				color: @text-color;
+				font-size: 14px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				cursor: pointer;
+				transition: all 0.25s linear;
+				&:not(:last-child){
+					margin-right: 20px;
+				}
+				span {
+					display: inline-block;
+					width: 100%;
+					text-align: right;
+				}
+				input[type=radio] {
+					width: auto;
+					cursor: pointer;
+					margin: 0 0 0 5px;
+					width: 2em;
+					height: 2em;
+					@media @mobile {
+						width: 48px;
+						height: 48px;
+					}
+				}
+				&:hover {
+					color: #000;
+				}
+			}
+
+		}
+	
+		
+		.mobile-expand {
+			display: none;
+		}
+
+}
