@@ -1,5 +1,6 @@
 (function() {
   function createSearchBar(options) {
+    console.log('Creating Search Bar with options:', options);
     const {container, props} = options;
     const {bathsSelector, bedsSelector, currencyLanguage, priceSelector, propertyTypeSelector, searchSettings, sqftSelector} = props;
     const $v5SearchWidget =$(`
@@ -77,6 +78,7 @@
         </div>
       </div>`);
     $v5SearchWidget.find('#search-filters .propertyTypeSelector').append($propertyTypeSelector);
+    $v5SearchWidget.appendTo(container);
   }
   function loadExternalCSS(href) {
     if (!document.querySelector(`link[href="${href}"]`)) {
