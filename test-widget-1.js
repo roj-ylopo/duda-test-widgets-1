@@ -2,41 +2,40 @@
   function createSearchBar(options) {
     const {container, props} = options;
     const {bathsSelector, bedsSelector, currencyLanguage, priceSelector, propertyTypeSelector, searchSettings, sqftSelector} = props;
-    
         
     console.log('props:', props);
     // Create main container
-    // container.style.fontFamily = 'sans-serif';
-    // container.style.maxWidth = '1000px';
-    // container.style.padding = '16px';
-    // container.style.border = '1px solid #ccc';
-    // container.style.borderRadius = '8px';
-    // container.style.background = '#fafafa';
+    container.style.fontFamily = 'sans-serif';
+    container.style.maxWidth = '1000px';
+    container.style.padding = '16px';
+    container.style.border = '1px solid #ccc';
+    container.style.borderRadius = '8px';
+    container.style.background = '#fafafa';
     container.className = 'search-widget-container';
 
     // Search input and button
     const searchRow = document.createElement('div');
-    // searchRow.style.display = 'flex';
-    // searchRow.style.marginBottom = '12px';
+    searchRow.style.display = 'flex';
+    searchRow.style.marginBottom = '12px';
     searchRow.className = 'search-row';
 
     const searchInput = document.createElement('input');
-    // searchInput.type = 'text';
-    // searchInput.placeholder = 'Search...';
-    // searchInput.style.flex = '1';
-    // searchInput.style.padding = '8px';
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search...';
+    searchInput.style.flex = '1';
+    searchInput.style.padding = '8px';
 
     const searchBtn = document.createElement('button');
-    // searchBtn.textContent = 'Search';
-    // searchBtn.style.marginLeft = '8px';
-    // searchBtn.style.padding = '8px 16px';
+    searchBtn.textContent = 'Search';
+    searchBtn.style.marginLeft = '8px';
+    searchBtn.style.padding = '8px 16px';
 
     searchRow.appendChild(searchInput);
     searchRow.appendChild(searchBtn);
 
     // Radio buttons
     const radioRow = document.createElement('div');
-    // radioRow.style.marginBottom = '12px';
+    radioRow.style.marginBottom = '12px';
     radioRow.className = 'search-type-radio-row';
     
 
@@ -50,7 +49,7 @@
     const areaLabel = document.createElement('label');
     areaLabel.htmlFor = 'search-area';
     areaLabel.textContent = 'Search by Area';
-    // areaLabel.style.marginRight = '16px';
+    areaLabel.style.marginRight = '16px';
 
     const addressRadio = document.createElement('input');
     addressRadio.type = 'radio';
@@ -70,16 +69,16 @@
     // Dropdowns
     function createDropdown(labelText, optionsArr) {
       const wrapper = document.createElement('div');
-      // wrapper.style.marginBottom = '8px';
+      wrapper.style.marginBottom = '8px';
 
       const label = document.createElement('label');
       label.textContent = labelText;
-      // label.style.display = 'block';
-      // label.style.marginBottom = '2px';
+      label.style.display = 'block';
+      label.style.marginBottom = '2px';
 
       const select = document.createElement('select');
-      // select.style.width = '100%';
-      // select.style.padding = '6px';
+      select.style.width = '100%';
+      select.style.padding = '6px';
 
       optionsArr.forEach(opt => {
         const option = document.createElement('option');
@@ -137,9 +136,9 @@
     // Clear button
     const clearBtn = document.createElement('button');
     clearBtn.textContent = 'Clear';
-    // clearBtn.style.marginTop = '12px';
-    // clearBtn.style.width = '100%';
-    // clearBtn.style.padding = '8px';
+    clearBtn.style.marginTop = '12px';
+    clearBtn.style.width = '100%';
+    clearBtn.style.padding = '8px';
 
     // Clear functionality
     clearBtn.onclick = function() {
@@ -182,7 +181,7 @@
     // these methods must be named init and clean
 
     init: function(options){
-      loadExternalCSS('https://roj-ylopo.github.io/duda-test-widgets-1/test-widget-1.css');
+      // loadExternalCSS('/test-widget-1.css');
       createSearchBar(options);
     },
 
