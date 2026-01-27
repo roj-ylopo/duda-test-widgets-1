@@ -1,6 +1,6 @@
 (function() {
   function createSearchBar(options) {
-    console.log('Creating Search Bar with options:', options);
+    console.log('Creating Search Bar with options2:', options);
     const {container, props} = options;
     const {bathsSelector, bedsSelector, currencyLanguage, priceSelector, propertyTypeSelector, searchSettings, sqftSelector} = props;
     const $v5SearchWidget =$(`
