@@ -2,6 +2,7 @@
   function createSearchBar(options) {
     const {container, props} = options;
     const {bathsSelector, bedsSelector, currencyLanguage, priceSelector, propertyTypeSelector, searchSettings, sqftSelector} = props;
+    console.log('jquery version:', $.fn.jquery);
         
     console.log('props:', props);
     // Create main container
