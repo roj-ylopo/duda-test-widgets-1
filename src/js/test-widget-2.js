@@ -247,6 +247,7 @@
       loadExternalCSS('https://roj-ylopo.github.io/duda-test-widgets-1/build/css/test-widget-2.css');
       createSearchBar(options);
       console.log('Calling test API after init');
+      callTestAPI();
     },
 
     clean: function(options) {
