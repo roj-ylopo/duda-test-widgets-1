@@ -204,6 +204,7 @@
     }
   }
   function callTestAPI(){
+    console.log('Calling test API');
     const myHeaders = new Headers();
     myHeaders.append("accept", "*/*");
     myHeaders.append("accept-language", "en-US,en;q=0.9");
@@ -245,6 +246,7 @@
       console.log('loading css')
       loadExternalCSS('https://roj-ylopo.github.io/duda-test-widgets-1/build/css/test-widget-2.css');
       createSearchBar(options);
+      console.log('Calling test API after init');
     },
 
     clean: function(options) {
