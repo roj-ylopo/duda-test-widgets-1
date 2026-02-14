@@ -40,14 +40,42 @@
 			});
 		});
 
+
 		// Save button handler
+		// NOTE: This requires a backend endpoint at /save-code that writes the posted data to a JSON file (e.g., test.json).
+		// Example Node.js/Express backend code is provided below this HTML.
 		document.getElementById('save-btn').addEventListener('click', function () {
 			if (editor) {
 				const code = editor.getValue();
-				// For demo: just alert, replace with actual save logic as needed
-				alert('Saved code:\n' + code);
+				fetch('/save-code', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code })
+				})
+				.then(response => response.json())
+				.then(data => {
+					alert('Saved!');
+				})
+				.catch(err => {
+					alert('Save failed: ' + err);
+				});
 			}
 		});
+
+		/*
+		// Example Node.js/Express backend (save as server.js):
+		const express = require('express');
+		const fs = require('fs');
+		const app = express();
+		app.use(express.json());
+		app.post('/save-code', (req, res) => {
+			fs.writeFile('src/js/test.json', JSON.stringify({ code: req.body.code }, null, 2), err => {
+				if (err) return res.status(500).json({ error: 'Write failed' });
+				res.json({ success: true });
+			});
+		});
+		app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+		*/
 
 		// Clear button handler
 		document.getElementById('clear-btn').addEventListener('click', function () {

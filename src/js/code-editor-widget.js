@@ -177,6 +177,11 @@
   }
   }
   function createCodeEditor(options) {
+    dmAPI.getCollection({collectionName: 'Collection-01'}).then(
+      function(data){ 
+        console.log(data); 
+      }
+    )
     const {container, props} = options;
     console.log('Creating Code Editor with options:', options);
     container.innerHTML = '<h3>Code Editor Widget</h3><p>This is a placeholder for the code editor widget. You can replace this with an actual code editor like Monaco or CodeMirror.</p>';
