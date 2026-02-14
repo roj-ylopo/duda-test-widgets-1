@@ -184,11 +184,7 @@
         console.log('getting current code from collection');
         const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
         console.log('Current code from collection:', currentCode);
-        if(currentCode){
-          container.innerHTML = $(currentCode).find('.test').html() || '<p>No code found in collection</p>';
-        } else {
-          container.innerHTML = '<p>No code found in collection</p>';
-        }
+        currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collection.</p>';
       }
     )
   }
