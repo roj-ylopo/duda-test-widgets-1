@@ -1,4 +1,5 @@
 (function() {
+  //TODO: Test if we can make api calls to https://my.duda.co/api/uis/pages without much changes to authenication.
   function createSearchBar(options) {
     console.log('Creating Search Bar with options2:', options);
     const {container, props} = options;
@@ -201,6 +202,40 @@
       link.href = href;
       document.head.appendChild(link);
     }
+  }
+  function callTestAPI(){
+    const myHeaders = new Headers();
+    myHeaders.append("accept", "*/*");
+    myHeaders.append("accept-language", "en-US,en;q=0.9");
+    myHeaders.append("baggage", "sentry-environment=direct,sentry-release=production_6180,sentry-public_key=0d2f170da99ddd8d3befc10a7f4ddd29,sentry-trace_id=6655a5e03856429ab32ea84645875850,sentry-org_id=1402758,sentry-sampled=false,sentry-sample_rand=0.6192290653392194,sentry-sample_rate=0.1");
+    myHeaders.append("cache-control", "no-cache");
+    myHeaders.append("content-type", "application/json");
+    myHeaders.append("dm_loc", "/home/site/e3fd21df/home");
+    myHeaders.append("dsid", "1240288");
+    myHeaders.append("pragma", "no-cache");
+    myHeaders.append("priority", "u=1, i");
+    myHeaders.append("referer", "https://my.duda.co/home/site/e3fd21df/home");
+    myHeaders.append("sec-ch-ua", "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"");
+    myHeaders.append("sec-ch-ua-mobile", "?0");
+    myHeaders.append("sec-ch-ua-platform", "\"Windows\"");
+    myHeaders.append("sec-fetch-dest", "empty");
+    myHeaders.append("sec-fetch-mode", "cors");
+    myHeaders.append("sec-fetch-site", "same-origin");
+    myHeaders.append("sentry-trace", "6655a5e03856429ab32ea84645875850-b2d78c5ea7398f1e-0");
+    myHeaders.append("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36");
+    myHeaders.append("x-requested-with", "XMLHttpRequest");
+    myHeaders.append("Cookie", "IR_gbd=duda.co; _fbp=fb.1.1766180421868.82038659091200705; cebs=1; hubspotutk=ead7da40a4a0d309143553cb48d3d06f; __hssrc=1; _dm_ga_clientId=4a100b0b-a286-4676-b4e0-581d17cd0404; language=en; landingPage=/signup; d_signup_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpcCI6IjEyNC4yMTcuMjAuNTgiLCJjcmVhdGVkQXQiOjE3NjYxODEwMzh9.QJJCiGTK-w8H7AYPci1-abygSJ4FbjR7Q-X-G8dE6bo; account_uuid=7ad764c28d7c424d8e4a39d38796864a; _gd_visitor=8b69b600-cf7c-4bbf-863a-f2f3fb3b3589; __zlcmid=1VgoE9xDfLyWC63; _gd_svisitor=3dd1027aece93800f5b332691e030000eef40100; __stripe_mid=b2e69729-c434-48d8-8f4d-ac835d9520ca3cb3ea; _dm_ac_tokens=ChE4tvjHXpvKSrg/NmomZAMPh08tjyhpB5WR/PHV/q+4ozbZmsPI5A==; first_conversion_medium_touchpoints=null%3B%20null%3B%20null%3B%20null; first_conversion_campaign_touchpoints=null%3B%20null%3B%20null%3B%20null; first_conversion_term_touchpoints=null%3B%20null%3B%20null%3B%20null; first_conversion_content_touchpoints=null%3B%20null%3B%20null%3B%20null; __adroll_fpc=0a7dd2848e0a4aec79bd51b94853dcf8-1769464891653; __ar_v4=NK6BCP2ZPJC2BEAS7JMXC2%3A20260125%3A9%7C5PYFNWAESVGU5BU47WLRIT%3A20260125%3A9%7CLVLOIN3JF5FT3CD5CBETI7%3A20260125%3A9; first_conversion_source_touchpoints=direct%3B%20direct%3B%20direct%3B%20di; _dm_remember_me=VWIzTUZoNCUyRjhUT3VoVTZlRHdhQzhnJTNEJTNEOkEyckJMV09YeWN6UnlVYkplc2ZMdWclM0QlM0Q; _gid=GA1.2.1889925267.1770982022; _ce.clock_data=808%2C124.217.22.235%2C1%2C8e253f85246590342756399a57054cb8%2CChrome%2CPH; _ga_9WXYK3PMB6=GS2.1.s1771033413$o12$g1$t1771033429$j44$l0$h0; _conv_r=s%3Auniversity.duda.co*m%3Areferral*t%3A*c%3A; JSESSIONID=B5AFD73034B0E10B3CF0D42B13B16178; _dm_account=%7B%22name%22%3A%22rbedana%40ylopo.com%22%2C%22uuid%22%3A%227ad764c28d7c424d8e4a39d38796864a%22%2C%22gaType%22%3A%22STAFF%22%2C%22lastLogin%22%3A1771033417000%7D; cebsp_=22; _ce.s=v~6f07ee01c69aa40ea49e8e8b8e871488065c366e~lcw~1771063240141~vir~returning~lva~1771012969186~vpv~0~v11ls~04893b90-098c-11f1-87ec-7bd067c5f15c~vdva~1769299199999~gtrk.la~mlls3ifk~v11.cs~268877~v11.s~04893b90-098c-11f1-87ec-7bd067c5f15c~v11.vs~6f07ee01c69aa40ea49e8e8b8e871488065c366e~v11.fsvd~eyJ1cmwiOiJzdXBwb3J0LmR1ZGEuY28vaGMvZW4tdXMvYXJ0aWNsZXMvKiIsInJlZiI6Imh0dHBzOi8vbXkuZHVkYS5jby8iLCJ1dG0iOltdfQ%3D%3D~v11.sla~1771063240141~v11.wss~1771063240141~lcw~1771063241733; __hstc=244318362.ead7da40a4a0d309143553cb48d3d06f.1766180422957.1771033440027.1771063355191.37; _gcl_au=1.1.2086644868.1766180421.682060753.1769626712.1769627205; _ga=GA1.1.4a100b0b-a286-4676-b4e0-581d17cd0404; _ga_GFZCS4CS4Q=GS2.1.s1770982022$o32$g1$t1771063355$j60$l0$h0; IR_13628=1771063356030%7C0%7C1771063356030%7C%7C; __hssc=244318362.3.1771063355191; _conv_v=vi%3A1*sc%3A39*cs%3A1771063357*fs%3A1766180419*pv%3A208*ps%3A1771036154; _conv_s=si%3A39*sh%3A1771063356648-0.1769813991363558*pv%3A1; _gd_session=45a0e66e-af76-4280-8d7f-2bee07c32391; _uetsid=f7bc912008ce11f19e0c3d62ce354c09; _uetvid=5214fbd0dd2311f091bf0951eb8c0064; _dm_se_token_me=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2NvdW50VXVpZCI6IjdhZDc2NGMyOGQ3YzQyNGQ4ZTRhMzlkMzg3OTY4NjRhIiwiYWNjb3VudE5hbWUiOiJyYmVkYW5hQHlsb3BvLmNvbSIsImNyZWF0aW9uVGltZSI6MTc3MTA2MzUzMzUxNiwiZXhwIjoxNzcxMDY1OTMzfQ.ece02-cz28pkOaI0ETEU7BQo0-qEaD6i5ewo3kdhRTI; AWSALB=kv9aU4RfVJ4ExqDR3xMgElumVUIY3oaBIrvdyXxvbrCchx5cAdZQpEqxb2ZtzUcSBfcRo+1u8zN9egBcnJXbeAy5KvNcarB5cUKvZbLthZiRPfKT/TvMtO3K5pOX; AWSALB=DgI9SbXxVEG6kM+W/LqMHXvoGbD6LvpMkSpQBXVDItfAIMs7xayABOQZ0FC8zhaZYXvYvNAPRpR2VLFsuy2Uf9DyRKHwUEDln/VS1MdcvnKpcd40QwcrVFTEmG2I; AWSALBCORS=DgI9SbXxVEG6kM+W/LqMHXvoGbD6LvpMkSpQBXVDItfAIMs7xayABOQZ0FC8zhaZYXvYvNAPRpR2VLFsuy2Uf9DyRKHwUEDln/VS1MdcvnKpcd40QwcrVFTEmG2I");
+
+    const requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+      redirect: "follow"
+    };
+
+    fetch("https://my.duda.co/api/uis/htmlcsseditor/page/19853281/element/830275703/html?currentEditorPageId=19853281&_=1771063228384", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
   }
 
   var handler = {
