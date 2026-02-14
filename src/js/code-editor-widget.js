@@ -177,14 +177,20 @@
   }
   }
   function createCodeEditor(options) {
+    const {container, props} = options;
     dmAPI.getCollection({collectionName: 'Collection-01'}).then(
       function(data){ 
         console.log(data); 
+        console.log('getting current code from collection');
+        const currentCode = data[0].data["Editable 1 - HTML"].value;
+        console.log('Current code from collection:', currentCode);
+        if(currentCode){
+          container.innerHTML = $(currentCode).find('.test').html() || '<p>No code found in collection</p>';
+        } else {
+          container.innerHTML = '<p>No code found in collection</p>';
+        }
       }
     )
-    const {container, props} = options;
-    console.log('Creating Code Editor with options:', options);
-    container.innerHTML = '<h3>Code Editor Widget</h3><p>This is a placeholder for the code editor widget. You can replace this with an actual code editor like Monaco or CodeMirror.</p>';
   }
 
   var handler = {
