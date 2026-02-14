@@ -28,13 +28,21 @@
 	</div>
 	<div id="editor-container"></div>
 	<script>
+    dmAPI.getCollection({collectionName: 'code-blocks'}).then(
+      function(data){ 
+        console.log('getting collection via Settings Panel');
+        const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
+        console.log('Current code from collection:', currentCode);
+        currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
+      }
+    )
 		// Monaco loader config
 		require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
 		let editor;
 		require(["vs/editor/editor.main"], function () {
 			editor = monaco.editor.create(document.getElementById('editor-container'), {
-				value: '// Start coding...\n',
-				language: 'javascript',
+				value: '<!-- Start coding... -->\n',
+				language: 'html',
 				theme: 'vs-dark',
 				automaticLayout: true
 			});
