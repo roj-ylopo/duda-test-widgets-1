@@ -178,7 +178,7 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
-    dmAPI.getCollection({collectionName: 'Collection-01'}).then(
+    dmAPI.getCollection({collectionName: 'code-blocks'}).then(
       function(data){ 
         console.log(data); 
         console.log('getting current code from collection');
