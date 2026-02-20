@@ -179,6 +179,9 @@
   function createCodeEditor(options) {
     const {container, props} = options;
     console.log('props:', props);
+    console.log('All props keys:', Object.keys(props || {}));
+    console.log('props.code:', props?.code);
+    console.log('props.encoded:', props?.encoded);
     
     // Use code from widget settings if available, otherwise fallback to CMS
     if (props && props.code) {
@@ -188,6 +191,7 @@
       if (props.encoded) {
         try {
           code = decodeURIComponent(escape(atob(code)));
+          console.log('Decoded code:', code);
         } catch (error) {
           console.error('Error decoding base64 content:', error);
           code = '<!-- Error decoding content -->';
