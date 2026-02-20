@@ -180,40 +180,64 @@
     const {container, props} = options;
     console.log('props:', props);
     console.log('All props keys:', Object.keys(props || {}));
-    console.log('props.code:', props?.code);
-    console.log('props.encoded:', props?.encoded);
     
-    // Use code from widget settings if available, otherwise fallback to CMS
-    if (props && props.code) {
-      let code = props.code;
+    // Create unique identifier for this widget instance
+    const siteId = props.debugData?.siteId || '';
+    const elementId = props.debugData?.elementId || '';
+    const uniqueId = `widget_${siteId}_${elementId}`;
+    
+    console.log('Attempting to load settings from localStorage for:', uniqueId);
+    
+    // Try to load settings from localStorage first
+    if (siteId && elementId) {
+      const savedCode = localStorage.getItem(uniqueId);
       
-      // Decode if it's base64 encoded
-      if (props.encoded) {
-        try {
-          code = decodeURIComponent(escape(atob(code)));
-          console.log('Decoded code:', code);
-        } catch (error) {
-          console.error('Error decoding base64 content:', error);
-          code = '<!-- Error decoding content -->';
-        }
+      if (savedCode) {
+        console.log('Retrieved code from localStorage:', savedCode);
+        container.innerHTML = savedCode;
+        return;
+      } else {
+        console.log('No code found in localStorage, trying props...');
+        tryPropsOrFallback();
       }
-      
-      console.log('Using code from widget settings:', code);
-      container.innerHTML = code;
     } else {
-      console.log('No code from settings, trying CMS collection...');
-      dmAPI.getCollection({collectionName: 'code-blocks'}).then(
-        function(data){ 
-          console.log(data); 
-          console.log('getting current code from collection');
-          const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
-          console.log('Current code from collection:', currentCode);
-          currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
+      console.log('Missing siteId or elementId, trying props...');
+      tryPropsOrFallback();
+    }
+    
+    function tryPropsOrFallback() {
+      // Use code from widget props if available, otherwise fallback to CMS
+      if (props && props.code) {
+        let code = props.code;
+        
+        // Decode if it's base64 encoded
+        if (props.encoded) {
+          try {
+            code = decodeURIComponent(escape(atob(code)));
+            console.log('Decoded code from props:', code);
+          } catch (error) {
+            console.error('Error decoding base64 content:', error);
+            code = '<!-- Error decoding content -->';
+          }
         }
-      ).catch(function(error) {
-        console.log('CMS collection error:', error);
-        container.innerHTML = '<p>No code found.</p>';
-      });
+        
+        console.log('Using code from widget props:', code);
+        container.innerHTML = code;
+      } else {
+        console.log('No code from props, trying CMS collection...');
+        dmAPI.getCollection({collectionName: 'code-blocks'}).then(
+          function(data){ 
+            console.log(data); 
+            console.log('getting current code from collection');
+            const currentCode = data[0].data.html;
+            console.log('Current code from collection:', currentCode);
+            currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
+          }
+        ).catch(function(error) {
+          console.log('CMS collection error:', error);
+          container.innerHTML = '<p>No code found. Click the widget settings to add code.</p>';
+        });
+      }
     }
   }
 

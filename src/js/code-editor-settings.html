@@ -35,43 +35,28 @@
     // Store code if received before Monaco loads
     window._pendingCode = undefined;
 
-    // Listen for Duda's init message to set code
-    window.addEventListener('message', function(event) {
-      console.log('Received message in settings iframe:', event.data);
+    // Load existing code from localStorage on startup
+    function loadFromLocalStorage() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const siteId = urlParams.get('siteId');
+      const elementId = urlParams.get('elementId');
+      const uniqueId = `widget_${siteId}_${elementId}`;
       
-      if (
-        event.data &&
-        event.data.type === 'duda:widget-settings:init' &&
-        event.data.payload
-      ) {
-        let code = event.data.payload.code || event.data.payload.externalSettings?.code || '';
-        
-        // Decode if it's base64 encoded
-        if (event.data.payload.encoded || (event.data.payload.externalSettings && event.data.payload.externalSettings.encoded)) {
-          try {
-            code = decodeURIComponent(escape(atob(code)));
-          } catch (error) {
-            console.error('Error decoding base64 content:', error);
-          }
-        }
-        
-        console.log('Initial code from Duda:', code);
-        
+      const savedCode = localStorage.getItem(uniqueId);
+      console.log('Loading from localStorage with key:', uniqueId);
+      console.log('Retrieved code:', savedCode);
+      
+      if (savedCode) {
         if (editor) {
-          editor.setValue(code || '<!-- Start coding... -->\n');
+          editor.setValue(savedCode);
         } else {
-          window._pendingCode = code || '<!-- Start coding... -->\n';
+          window._pendingCode = savedCode;
         }
       }
-    });
+    }
 
-    // Request initial settings from Duda after a short delay
-    setTimeout(() => {
-      console.log('Requesting initial settings from Duda');
-      window.parent.postMessage({
-        type: 'duda:widget-settings:request-init'
-      }, '*');
-    }, 100);
+    // Load saved code after a short delay to ensure Monaco is ready
+    setTimeout(loadFromLocalStorage, 200);
 
     require(["vs/editor/editor.main"], function () {
       editor = monaco.editor.create(document.getElementById('editor-container'), {
@@ -82,29 +67,27 @@
       });
     });
 
-    // Save button handler: send code to Duda
+    // Save button handler: save to localStorage
     document.getElementById('save-btn').addEventListener('click', function () {
       if (editor) {
         const code = editor.getValue();
+        
+        // Get URL parameters to create unique identifier
+        const urlParams = new URLSearchParams(window.location.search);
+        const siteId = urlParams.get('siteId');
+        const elementId = urlParams.get('elementId');
+        const widgetId = urlParams.get('widgetId');
+        
+        const uniqueId = `widget_${siteId}_${elementId}`;
+        
         try {
-          // Base64 encode the content to avoid JSON parsing issues
-          const encodedCode = btoa(unescape(encodeURIComponent(code)));
-          console.log('Saving encoded code:', encodedCode);
-          
-          window.parent.postMessage(
-            {
-              type: 'duda:widget-settings:update',
-              payload: { 
-                code: encodedCode,
-                encoded: true
-              }
-            },
-            '*'
-          );
-          console.log('Settings saved successfully');
+          // Save to localStorage
+          localStorage.setItem(uniqueId, code);
+          console.log('Saved to localStorage with key:', uniqueId);
+          console.log('Saved code:', code);
           alert('Saved!');
         } catch (error) {
-          console.error('Error saving settings:', error);
+          console.error('Error saving to localStorage:', error);
           alert('Save failed: ' + error.message);
         }
       }
