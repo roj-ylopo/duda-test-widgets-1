@@ -178,15 +178,39 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
-    dmAPI.getCollection({collectionName: 'code-blocks'}).then(
-      function(data){ 
-        console.log(data); 
-        console.log('getting current code from collection');
-        const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
-        console.log('Current code from collection:', currentCode);
-        currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
+    console.log('props:', props);
+    
+    // Use code from widget settings if available, otherwise fallback to CMS
+    if (props && props.code) {
+      let code = props.code;
+      
+      // Decode if it's base64 encoded
+      if (props.encoded) {
+        try {
+          code = decodeURIComponent(escape(atob(code)));
+        } catch (error) {
+          console.error('Error decoding base64 content:', error);
+          code = '<!-- Error decoding content -->';
+        }
       }
-    )
+      
+      console.log('Using code from widget settings:', code);
+      container.innerHTML = code;
+    } else {
+      console.log('No code from settings, trying CMS collection...');
+      dmAPI.getCollection({collectionName: 'code-blocks'}).then(
+        function(data){ 
+          console.log(data); 
+          console.log('getting current code from collection');
+          const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
+          console.log('Current code from collection:', currentCode);
+          currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
+        }
+      ).catch(function(error) {
+        console.log('CMS collection error:', error);
+        container.innerHTML = '<p>No code found.</p>';
+      });
+    }
   }
 
   var handler = {
