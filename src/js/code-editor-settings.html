@@ -40,11 +40,26 @@
       const urlParams = new URLSearchParams(window.location.search);
       const siteId = urlParams.get('siteId');
       const elementId = urlParams.get('elementId');
-      const uniqueId = `widget_${siteId}_${elementId}`;
+      
+      console.log('=== SETTINGS IFRAME DEBUG ===');
+      console.log('Current URL:', window.location.href);
+      console.log('URL Params:', Object.fromEntries(urlParams.entries()));
+      console.log('siteId from URL:', siteId);
+      console.log('elementId from URL:', elementId);
+      
+      let uniqueId;
+      if (siteId && elementId) {
+        uniqueId = `widget_${siteId}_${elementId}`;
+      } else {
+        // Fallback to a default key if URL params are missing
+        uniqueId = `widget_custom_editor`;
+        console.warn('Missing siteId or elementId in URL, using fallback key:', uniqueId);
+      }
+      
+      console.log('Using localStorage key:', uniqueId);
       
       const savedCode = localStorage.getItem(uniqueId);
-      console.log('Loading from localStorage with key:', uniqueId);
-      console.log('Retrieved code:', savedCode);
+      console.log('Retrieved code from localStorage:', savedCode);
       
       if (savedCode) {
         if (editor) {
@@ -78,7 +93,18 @@
         const elementId = urlParams.get('elementId');
         const widgetId = urlParams.get('widgetId');
         
-        const uniqueId = `widget_${siteId}_${elementId}`;
+        console.log('=== SAVING TO LOCALSTORAGE ===');
+        console.log('siteId from URL:', siteId);
+        console.log('elementId from URL:', elementId);
+        
+        let uniqueId;
+        if (siteId && elementId) {
+          uniqueId = `widget_${siteId}_${elementId}`;
+        } else {
+          // Fallback to a default key if URL params are missing
+          uniqueId = `widget_custom_editor`;
+          console.warn('Missing siteId or elementId in URL, using fallback key:', uniqueId);
+        }
         
         try {
           // Save to localStorage

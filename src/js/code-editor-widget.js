@@ -186,23 +186,41 @@
     // Create unique identifier for this widget instance
     const siteId = props.debugData?.siteId || '';
     const elementId = props.debugData?.elementId || '';
-    const uniqueId = `widget_${siteId}_${elementId}`;
+    const primaryKey = `widget_${siteId}_${elementId}`;
     
     console.log('siteId:', siteId);
     console.log('elementId:', elementId);
-    console.log('uniqueId:', uniqueId);
-    console.log('Attempting to load settings from localStorage for:', uniqueId);
-    
-    // Always try localStorage first, even if siteId/elementId seem missing
-    const savedCode = localStorage.getItem(uniqueId);
-    console.log('localStorage result for key', uniqueId, ':', savedCode);
+    console.log('primaryKey:', primaryKey);
     
     // Also check all localStorage keys to see what's actually stored
     console.log('All localStorage keys:');
+    const allKeys = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith('widget_')) {
+        allKeys.push(key);
         console.log(`  ${key}: ${localStorage.getItem(key)?.substring(0, 50)}...`);
+      }
+    }
+    
+    // Try multiple possible keys
+    const keysToTry = [
+      primaryKey,
+      'widget_custom_editor', // fallback key
+      ...allKeys // any other widget keys found
+    ];
+    
+    let savedCode = null;
+    let usedKey = null;
+    
+    for (const key of keysToTry) {
+      if (key && key !== 'undefined') {
+        savedCode = localStorage.getItem(key);
+        if (savedCode) {
+          usedKey = key;
+          console.log(`✅ Found code using key: ${key}`);
+          break;
+        }
       }
     }
     
