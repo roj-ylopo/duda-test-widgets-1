@@ -178,32 +178,42 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
+    console.log('=== WIDGET DEBUG ===');
     console.log('props:', props);
     console.log('All props keys:', Object.keys(props || {}));
+    console.log('props.debugData:', props.debugData);
     
     // Create unique identifier for this widget instance
     const siteId = props.debugData?.siteId || '';
     const elementId = props.debugData?.elementId || '';
     const uniqueId = `widget_${siteId}_${elementId}`;
     
+    console.log('siteId:', siteId);
+    console.log('elementId:', elementId);
+    console.log('uniqueId:', uniqueId);
     console.log('Attempting to load settings from localStorage for:', uniqueId);
     
-    // Try to load settings from localStorage first
-    if (siteId && elementId) {
-      const savedCode = localStorage.getItem(uniqueId);
-      
-      if (savedCode) {
-        console.log('Retrieved code from localStorage:', savedCode);
-        container.innerHTML = savedCode;
-        return;
-      } else {
-        console.log('No code found in localStorage, trying props...');
-        tryPropsOrFallback();
+    // Always try localStorage first, even if siteId/elementId seem missing
+    const savedCode = localStorage.getItem(uniqueId);
+    console.log('localStorage result for key', uniqueId, ':', savedCode);
+    
+    // Also check all localStorage keys to see what's actually stored
+    console.log('All localStorage keys:');
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('widget_')) {
+        console.log(`  ${key}: ${localStorage.getItem(key)?.substring(0, 50)}...`);
       }
-    } else {
-      console.log('Missing siteId or elementId, trying props...');
-      tryPropsOrFallback();
     }
+    
+    if (savedCode) {
+      console.log('✅ Using code from localStorage:', savedCode);
+      container.innerHTML = savedCode;
+      return;
+    }
+    
+    console.log('❌ No localStorage code found, trying fallbacks...');
+    tryPropsOrFallback();
     
     function tryPropsOrFallback() {
       // Use code from widget props if available, otherwise fallback to CMS
