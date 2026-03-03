@@ -90,6 +90,27 @@
 				
 				console.log(`Loading from Duda: ${siteName}/${collectionName}`);
 				
+				// First, try to list all collections to see what exists
+				console.log('Step 1: Listing all collections...');
+				const listResponse = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				
+				if (listResponse.ok) {
+					const collections = await listResponse.json();
+					console.log('Available collections:', collections);
+					
+					if (!collections.find(c => c.name === collectionName)) {
+						alert(`Collection "${collectionName}" not found. Available collections: ${collections.map(c => c.name).join(', ')}`);
+						return;
+					}
+				}
+				
+				// Now try to get the specific collection
+				console.log('Step 2: Getting collection data...');
 				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
 					method: 'GET',
 					headers: {
