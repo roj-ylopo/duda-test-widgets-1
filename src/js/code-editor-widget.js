@@ -178,95 +178,15 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
-    console.log('=== WIDGET DEBUG ===');
-    console.log('props:', props);
-    console.log('All props keys:', Object.keys(props || {}));
-    console.log('props.debugData:', props.debugData);
-    
-    // Create unique identifier for this widget instance
-    const siteId = props.debugData?.siteId || '';
-    const elementId = props.debugData?.elementId || '';
-    const primaryKey = `widget_${siteId}_${elementId}`;
-    
-    console.log('siteId:', siteId);
-    console.log('elementId:', elementId);
-    console.log('primaryKey:', primaryKey);
-    
-    // Also check all localStorage keys to see what's actually stored
-    console.log('All localStorage keys:');
-    const allKeys = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('widget_')) {
-        allKeys.push(key);
-        console.log(`  ${key}: ${localStorage.getItem(key)?.substring(0, 50)}...`);
+    dmAPI.getCollection({collectionName: 'code-blocks'}).then(
+      function(data){ 
+        console.log(data); 
+        console.log('getting current code from collection');
+        const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
+        console.log('Current code from collection:', currentCode);
+        currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
       }
-    }
-    
-    // Try multiple possible keys
-    const keysToTry = [
-      primaryKey,
-      'widget_custom_editor', // fallback key
-      ...allKeys // any other widget keys found
-    ];
-    
-    let savedCode = null;
-    let usedKey = null;
-    
-    for (const key of keysToTry) {
-      if (key && key !== 'undefined') {
-        savedCode = localStorage.getItem(key);
-        if (savedCode) {
-          usedKey = key;
-          console.log(`✅ Found code using key: ${key}`);
-          break;
-        }
-      }
-    }
-    
-    if (savedCode) {
-      console.log('✅ Using code from localStorage:', savedCode);
-      container.innerHTML = savedCode;
-      return;
-    }
-    
-    console.log('❌ No localStorage code found, trying fallbacks...');
-    tryPropsOrFallback();
-    
-    function tryPropsOrFallback() {
-      // Use code from widget props if available, otherwise fallback to CMS
-      if (props && props.code) {
-        let code = props.code;
-        
-        // Decode if it's base64 encoded
-        if (props.encoded) {
-          try {
-            code = decodeURIComponent(escape(atob(code)));
-            console.log('Decoded code from props:', code);
-          } catch (error) {
-            console.error('Error decoding base64 content:', error);
-            code = '<!-- Error decoding content -->';
-          }
-        }
-        
-        console.log('Using code from widget props:', code);
-        container.innerHTML = code;
-      } else {
-        console.log('No code from props, trying CMS collection...');
-        dmAPI.getCollection({collectionName: 'code-blocks'}).then(
-          function(data){ 
-            console.log(data); 
-            console.log('getting current code from collection');
-            const currentCode = data[0].data.html;
-            console.log('Current code from collection:', currentCode);
-            currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
-          }
-        ).catch(function(error) {
-          console.log('CMS collection error:', error);
-          container.innerHTML = '<p>No code found. Click the widget settings to add code.</p>';
-        });
-      }
-    }
+    )
   }
 
   var handler = {

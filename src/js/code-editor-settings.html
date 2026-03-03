@@ -29,102 +29,63 @@
 	</div>
 	<div id="editor-container"></div>
 	<script>
-    // Monaco loader config
-    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
-    let editor;
-    // Store code if received before Monaco loads
-    window._pendingCode = undefined;
+    // TODO: Check if there i anything usable from the window object that can help get the current code block collection
+    console.log('window object:', window);
+		// Monaco loader config
+		require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+		let editor;
+		require(["vs/editor/editor.main"], function () {
+			editor = monaco.editor.create(document.getElementById('editor-container'), {
+				value: '<!-- Start coding... -->\n',
+				language: 'html',
+				theme: 'vs-dark',
+				automaticLayout: true
+			});
+		});
 
-    // Load existing code from localStorage on startup
-    function loadFromLocalStorage() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const siteId = urlParams.get('siteId');
-      const elementId = urlParams.get('elementId');
-      
-      console.log('=== SETTINGS IFRAME DEBUG ===');
-      console.log('Current URL:', window.location.href);
-      console.log('URL Params:', Object.fromEntries(urlParams.entries()));
-      console.log('siteId from URL:', siteId);
-      console.log('elementId from URL:', elementId);
-      
-      let uniqueId;
-      if (siteId && elementId) {
-        uniqueId = `widget_${siteId}_${elementId}`;
-      } else {
-        // Fallback to a default key if URL params are missing
-        uniqueId = `widget_custom_editor`;
-        console.warn('Missing siteId or elementId in URL, using fallback key:', uniqueId);
-      }
-      
-      console.log('Using localStorage key:', uniqueId);
-      
-      const savedCode = localStorage.getItem(uniqueId);
-      console.log('Retrieved code from localStorage:', savedCode);
-      
-      if (savedCode) {
-        if (editor) {
-          editor.setValue(savedCode);
-        } else {
-          window._pendingCode = savedCode;
-        }
-      }
-    }
 
-    // Load saved code after a short delay to ensure Monaco is ready
-    setTimeout(loadFromLocalStorage, 200);
+		// Save button handler
+		// NOTE: This requires a backend endpoint at /save-code that writes the posted data to a JSON file (e.g., test.json).
+		// Example Node.js/Express backend code is provided below this HTML.
+		document.getElementById('save-btn').addEventListener('click', function () {
+			if (editor) {
+				const code = editor.getValue();
+				fetch('/save-code', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ code })
+				})
+				.then(response => response.json())
+				.then(data => {
+					alert('Saved!');
+				})
+				.catch(err => {
+					alert('Save failed: ' + err);
+				});
+			}
+		});
 
-    require(["vs/editor/editor.main"], function () {
-      editor = monaco.editor.create(document.getElementById('editor-container'), {
-        value: window._pendingCode || '<!-- Start coding... -->\n',
-        language: 'html',
-        theme: 'vs-dark',
-        automaticLayout: true
-      });
-    });
+		/*
+		// Example Node.js/Express backend (save as server.js):
+		const express = require('express');
+		const fs = require('fs');
+		const app = express();
+		app.use(express.json());
+		app.post('/save-code', (req, res) => {
+			fs.writeFile('src/js/test.json', JSON.stringify({ code: req.body.code }, null, 2), err => {
+				if (err) return res.status(500).json({ error: 'Write failed' });
+				res.json({ success: true });
+			});
+		});
+		app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+		*/
 
-    // Save button handler: save to localStorage
-    document.getElementById('save-btn').addEventListener('click', function () {
-      if (editor) {
-        const code = editor.getValue();
-        
-        // Get URL parameters to create unique identifier
-        const urlParams = new URLSearchParams(window.location.search);
-        const siteId = urlParams.get('siteId');
-        const elementId = urlParams.get('elementId');
-        const widgetId = urlParams.get('widgetId');
-        
-        console.log('=== SAVING TO LOCALSTORAGE ===');
-        console.log('siteId from URL:', siteId);
-        console.log('elementId from URL:', elementId);
-        
-        let uniqueId;
-        if (siteId && elementId) {
-          uniqueId = `widget_${siteId}_${elementId}`;
-        } else {
-          // Fallback to a default key if URL params are missing
-          uniqueId = `widget_custom_editor`;
-          console.warn('Missing siteId or elementId in URL, using fallback key:', uniqueId);
-        }
-        
-        try {
-          // Save to localStorage
-          localStorage.setItem(uniqueId, code);
-          console.log('Saved to localStorage with key:', uniqueId);
-          console.log('Saved code:', code);
-          alert('Saved!');
-        } catch (error) {
-          console.error('Error saving to localStorage:', error);
-          alert('Save failed: ' + error.message);
-        }
-      }
-    });
-
-    // Clear button handler
-    document.getElementById('clear-btn').addEventListener('click', function () {
-      if (editor) {
-        editor.setValue('');
-      }
-    });
+		// Clear button handler
+		document.getElementById('clear-btn').addEventListener('click', function () {
+			if (editor) {
+				editor.setValue('');
+			}
+		});
 	</script>
 </body>
 </html>
