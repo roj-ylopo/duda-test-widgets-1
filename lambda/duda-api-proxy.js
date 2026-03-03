@@ -48,9 +48,9 @@ exports.handler = async (event) => {
     }
 
     // Route requests based on path
-    if (path.includes('/collections/')) {
+    if (path.includes('/collection/')) {
       return await handleCollectionsAPI(path, method, body);
-    } else if (path.includes('/collections')) {
+    } else if (path.includes('/collection')) {
       // Handle listing collections (no specific collection name)
       return await handleCollectionsListAPI(path, method, body);
     }
@@ -72,15 +72,15 @@ exports.handler = async (event) => {
 };
 
 async function handleCollectionsListAPI(path, method, body) {
-  // Extract site_name from path: /api/sites/{site_name}/collections
+  // Extract site_name from path: /api/sites/multiscreen/{site_name}/collection
   const pathParts = path.split('/');
-  const siteNameIndex = pathParts.findIndex(part => part === 'sites') + 1;
+  const siteNameIndex = pathParts.findIndex(part => part === 'multiscreen') + 1;
   
   if (siteNameIndex === 0) {
     return {
       statusCode: 400,
       headers: corsHeaders,
-      body: JSON.stringify({ error: 'Invalid path format. Expected /api/sites/{site_name}/collections' })
+      body: JSON.stringify({ error: 'Invalid path format. Expected /api/sites/multiscreen/{site_name}/collection' })
     };
   }
 
@@ -95,7 +95,7 @@ async function handleCollectionsListAPI(path, method, body) {
   }
 
   // Build Duda API URL for listing collections
-  const dudaPath = `/sites/${siteName}/collections`;
+  const dudaPath = `/sites/multiscreen/${siteName}/collection`;
   
   if (method === 'GET') {
     return await callDudaAPI('GET', dudaPath);
@@ -109,16 +109,16 @@ async function handleCollectionsListAPI(path, method, body) {
 }
 
 async function handleCollectionsAPI(path, method, body) {
-  // Extract site_name from path: /api/sites/{site_name}/collections/{collection_name}
+  // Extract site_name from path: /api/sites/multiscreen/{site_name}/collection/{collection_name}
   const pathParts = path.split('/');
-  const siteNameIndex = pathParts.findIndex(part => part === 'sites') + 1;
-  const collectionNameIndex = pathParts.findIndex(part => part === 'collections') + 1;
+  const siteNameIndex = pathParts.findIndex(part => part === 'multiscreen') + 1;
+  const collectionNameIndex = pathParts.findIndex(part => part === 'collection') + 1;
   
   if (siteNameIndex === 0 || collectionNameIndex === 0) {
     return {
       statusCode: 400,
       headers: corsHeaders,
-      body: JSON.stringify({ error: 'Invalid path format. Expected /api/sites/{site_name}/collections/{collection_name}' })
+      body: JSON.stringify({ error: 'Invalid path format. Expected /api/sites/multiscreen/{site_name}/collection/{collection_name}' })
     };
   }
 
@@ -134,7 +134,7 @@ async function handleCollectionsAPI(path, method, body) {
   }
 
   // Build Duda API URL
-  const dudaPath = `/sites/${siteName}/collections/${collectionName}`;
+  const dudaPath = `/sites/multiscreen/${siteName}/collection/${collectionName}`;
   
   switch (method) {
     case 'GET':
