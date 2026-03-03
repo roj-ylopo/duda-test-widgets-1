@@ -7,8 +7,8 @@ const DUDA_BASE_URL = process.env.DUDA_BASE_URL || 'https://api.duda.co/api';
 
 // CORS headers for browser requests
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*', // Replace with your domain in production
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  'Access-Control-Allow-Origin': 'https://roj-ylopo.github.io', // Your GitHub Pages domain
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token',
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
   'Content-Type': 'application/json'
 };
