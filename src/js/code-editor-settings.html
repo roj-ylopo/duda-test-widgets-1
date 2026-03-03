@@ -219,11 +219,48 @@
 		// Test Lambda connectivity on page load
 		setTimeout(async function() {
 			try {
-				console.log('🧪 Testing Lambda connectivity...');
-				const testResponse = await fetch(LAMBDA_BASE_URL + '/test', { method: 'GET' });
-				console.log('🧪 Lambda test response status:', testResponse.status);
+				console.log('🧪 Testing basic Lambda connectivity...');
+				console.log('🌐 Testing URL:', LAMBDA_BASE_URL);
+				
+				// Test 1: Simple fetch to base URL
+				const testResponse1 = await fetch(LAMBDA_BASE_URL, { 
+					method: 'GET',
+					mode: 'cors'
+				});
+				console.log('🧪 Base URL test response status:', testResponse1.status);
+				
+				// Test 2: Test with /test endpoint  
+				const testResponse2 = await fetch(LAMBDA_BASE_URL + '/test', { 
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				console.log('🧪 /test endpoint response status:', testResponse2.status);
+				
+				// Test 3: Test actual API endpoint
+				const testResponse3 = await fetch(LAMBDA_BASE_URL + '/api/sites/test/collections', { 
+					method: 'GET',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+				console.log('🧪 API endpoint response status:', testResponse3.status);
+				console.log('✅ Lambda connectivity test completed - check logs above');
+				
 			} catch (error) {
-				console.warn('🚨 Lambda connectivity test failed:', error.message);
+				console.error('🚨 Lambda connectivity test failed:');
+				console.error('🚨 Error type:', error.name);
+				console.error('🚨 Error message:', error.message);
+				console.error('🚨 Full error:', error);
+				
+				// Additional debugging info
+				console.log('🔍 Debugging info:');
+				console.log('🔍 Current domain:', window.location.origin);
+				console.log('🔍 Lambda URL:', LAMBDA_BASE_URL);
+				console.log('🔍 Browser user agent:', navigator.userAgent);
 			}
 		}, 2000);
 	</script>

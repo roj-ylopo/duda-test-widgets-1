@@ -55,10 +55,21 @@ exports.handler = async (event) => {
       return await handleCollectionsListAPI(path, method, body);
     }
 
+    // Catch-all handler for debugging
     return {
-      statusCode: 404,
+      statusCode: 200,
       headers: corsHeaders,
-      body: JSON.stringify({ error: 'Endpoint not found' })
+      body: JSON.stringify({ 
+        message: 'Lambda function is working!',
+        receivedPath: path,
+        receivedMethod: method,
+        timestamp: new Date().toISOString(),
+        availableEndpoints: [
+          'GET /api/sites/{siteName}/collections - List collections',
+          'GET /api/sites/{siteName}/collections/{collectionName} - Get collection data',
+          'POST /api/sites/{siteName}/collections/{collectionName} - Save collection data'
+        ]
+      })
     };
 
   } catch (error) {
