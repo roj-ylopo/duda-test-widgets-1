@@ -1,0 +1,42 @@
+service: duda-api-proxy
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    DUDA_API_USERNAME: ${env:DUDA_API_USERNAME}
+    DUDA_API_PASSWORD: ${env:DUDA_API_PASSWORD}
+    DUDA_BASE_URL: ${env:DUDA_BASE_URL, 'https://api.duda.co/api'}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'  # Replace with your domain in production
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      allowedMethods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+
+functions:
+  dudaProxy:
+    handler: duda-api-proxy.handler
+    events:
+      - httpApi:
+          path: /api/sites/{siteName}/collections/{collectionName}
+          method: '*'
+      - httpApi:
+          path: /api/sites/{siteName}/collections/{collectionName}/{itemId}
+          method: '*'
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3001

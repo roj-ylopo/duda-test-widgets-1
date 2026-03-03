@@ -16,24 +16,58 @@
 		}
 		.editor-buttons button {
 			margin-right: 8px;
+			padding: 8px 12px;
+			border-radius: 4px;
+			border: 1px solid #ccc;
+			background: #f5f5f5;
+			cursor: pointer;
+		}
+		.editor-buttons button:hover {
+			background: #e0e0e0;
+		}
+		.config-section {
+			margin-bottom: 16px;
+			padding: 16px;
+			border: 1px solid #ddd;
+			border-radius: 4px;
+			background: #f9f9f9;
+		}
+		.config-section label {
+			display: block;
+			margin-bottom: 8px;
+			font-weight: bold;
+		}
+		.config-section input {
+			width: 200px;
+			padding: 4px 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			margin-left: 8px;
 		}
 	</style>
 	<!-- Monaco Editor CDN -->
 	<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
 <body>
-	<p>{{widgetId}}</p>
+	<p>Widget ID: {{widgetId}}</p>
+	<div class="config-section">
+		<label>Site Name: <input type="text" id="site-name" placeholder="your-duda-site" value=""></label>
+		<label>Collection: <input type="text" id="collection-name" placeholder="code-blocks" value="code-blocks"></label>
+	</div>
 	<div class="editor-buttons">
-		<button id="save-btn">Save</button>
+		<button id="load-btn">Load from Duda</button>
+		<button id="save-btn">Save to Duda</button>
 		<button id="clear-btn">Clear</button>
 	</div>
 	<div id="editor-container"></div>
 	<script>
-    // TODO: Check if there i anything usable from the window object that can help get the current code block collection
-    console.log('window object:', window);
+		// Configuration - Replace with your Lambda function URL
+		const LAMBDA_BASE_URL = 'https://t3gv3b9s61.execute-api.us-west-1.amazonaws.com/dev'; // Update this!
+		
 		// Monaco loader config
 		require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
 		let editor;
+		
 		require(["vs/editor/editor.main"], function () {
 			editor = monaco.editor.create(document.getElementById('editor-container'), {
 				value: '<!-- Start coding... -->\n',
@@ -43,42 +77,96 @@
 			});
 		});
 
-
-		// Save button handler
-		// NOTE: This requires a backend endpoint at /save-code that writes the posted data to a JSON file (e.g., test.json).
-		// Example Node.js/Express backend code is provided below this HTML.
-		document.getElementById('save-btn').addEventListener('click', function () {
-			if (editor) {
-				const code = editor.getValue();
-				fetch('/save-code', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ code })
-				})
-				.then(response => response.json())
-				.then(data => {
-					alert('Saved!');
-				})
-				.catch(err => {
-					alert('Save failed: ' + err);
+		// Load from Duda CMS
+		document.getElementById('load-btn').addEventListener('click', async function () {
+			try {
+				const siteName = document.getElementById('site-name').value.trim();
+				const collectionName = document.getElementById('collection-name').value.trim();
+				
+				if (!siteName) {
+					alert('Please enter a site name');
+					return;
+				}
+				
+				console.log(`Loading from Duda: ${siteName}/${collectionName}`);
+				
+				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
 				});
+				
+				if (!response.ok) {
+					const error = await response.text();
+					throw new Error(`HTTP ${response.status}: ${error}`);
+				}
+				
+				const data = await response.json();
+				console.log('Loaded data from Duda:', data);
+				
+				// Assume first item has the code in 'html' field
+				if (data && data.length > 0 && data[0].data && data[0].data.html) {
+					editor.setValue(data[0].data.html);
+					alert('Code loaded successfully!');
+				} else {
+					alert('No code found in collection or unexpected data format');
+					console.log('Data structure:', data);
+				}
+				
+			} catch (error) {
+				console.error('Load failed:', error);
+				alert('Load failed: ' + error.message);
 			}
 		});
 
-		/*
-		// Example Node.js/Express backend (save as server.js):
-		const express = require('express');
-		const fs = require('fs');
-		const app = express();
-		app.use(express.json());
-		app.post('/save-code', (req, res) => {
-			fs.writeFile('src/js/test.json', JSON.stringify({ code: req.body.code }, null, 2), err => {
-				if (err) return res.status(500).json({ error: 'Write failed' });
-				res.json({ success: true });
-			});
+		// Save to Duda CMS
+		document.getElementById('save-btn').addEventListener('click', async function () {
+			if (!editor) return;
+			
+			try {
+				const siteName = document.getElementById('site-name').value.trim();
+				const collectionName = document.getElementById('collection-name').value.trim();
+				const code = editor.getValue();
+				
+				if (!siteName) {
+					alert('Please enter a site name');
+					return;
+				}
+				
+				console.log(`Saving to Duda: ${siteName}/${collectionName}`);
+				
+				// Create or update collection item
+				const payload = {
+					name: 'monaco-editor-code',
+					data: {
+						html: code,
+						lastUpdated: new Date().toISOString()
+					}
+				};
+				
+				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(payload)
+				});
+				
+				if (!response.ok) {
+					const error = await response.text();
+					throw new Error(`HTTP ${response.status}: ${error}`);
+				}
+				
+				const result = await response.json();
+				console.log('Save result:', result);
+				alert('Code saved successfully to Duda!');
+				
+			} catch (error) {
+				console.error('Save failed:', error);
+				alert('Save failed: ' + error.message);
+			}
 		});
-		app.listen(3000, () => console.log('Server running on http://localhost:3000'));
-		*/
 
 		// Clear button handler
 		document.getElementById('clear-btn').addEventListener('click', function () {

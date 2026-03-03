@@ -1,0 +1,13 @@
+{
+  "name": "duda-api-proxy",
+  "version": "1.0.0",
+  "description": "Secure proxy for Duda API calls from Monaco editor widget",
+  "main": "duda-api-proxy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["aws", "lambda", "duda", "api", "proxy"],
+  "author": "Roj",
+  "license": "MIT",
+  "dependencies": {}
+}

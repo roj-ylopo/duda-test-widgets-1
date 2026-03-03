@@ -1,5 +1,6 @@
 (function() {
   //TODO: Test if we can make api calls to https://my.duda.co/api/uis/pages without much changes to authenication.
+  //TODO: This needs an actual server to make API calls. Maybe a serverless function.
   function createSearchBar(options) {
     console.log('Creating Search Bar with options2:', options);
     const {container, props} = options;

@@ -187,7 +187,10 @@
         console.log('Current code from collection:', currentCode);
         currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
       }
-    )
+    ).catch(function(error) {
+      console.error('Failed to load code from collection:', error);
+      container.innerHTML = '<p>Error loading code. Please check console for details.</p>';
+    });
   }
 
   var handler = {
