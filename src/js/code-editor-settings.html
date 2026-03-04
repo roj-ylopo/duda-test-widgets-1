@@ -177,9 +177,8 @@
 				// } else {
 				// 	alert('Collection loaded but no HTML content found in first item.');
 				// }
-
-
-
+				const currentCodeBlocks = data.values.filter(item => item.page_item_url === page);
+				editor.setValue(currentCodeBlocks.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
 			} else {
 				alert('No items found in collection');
 				console.log('Data structure:', data);
