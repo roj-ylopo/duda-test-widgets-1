@@ -37,7 +37,7 @@
 			margin-bottom: 8px;
 			font-weight: bold;
 		}
-		.config-section input {
+		.config-section input, .config-section select {
 			width: 200px;
 			padding: 4px 8px;
 			border: 1px solid #ccc;
@@ -53,6 +53,7 @@
 	<div class="config-section">
 		<label>Site Name: <input type="text" id="site-name" placeholder="your-duda-site" value=""></label>
 		<label>Collection: <input type="text" id="collection-name" placeholder="code-blocks" value="code-blocks"></label>
+		<label>Page Item: <select id="page-item-select" disabled><option value="">Load collection first</option></select></label>
 	</div>
 	<div class="editor-buttons">
 		<button id="load-btn">Load from Duda</button>
@@ -67,13 +68,10 @@
 		// Monaco loader config
 		require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
 		let editor;
-		
-		require(["vs/editor/editor.main"], function () {
-			editor = monaco.editor.create(document.getElementById('editor-container'), {
-				value: '<!-- Start coding... -->\n',
-				language: 'html',
-				theme: 'vs-dark',
-				automaticLayout: true
+	let collectionData = null; // Store loaded collection data
+	
+	require(["vs/editor/editor.main"], function () {
+		editor = monaco.editor.create(document.getElementById('editor-container'), {
 			});
 		});
 
@@ -137,18 +135,37 @@
 				
 				const data = await response.json();
 				console.log('Loaded data from Duda:', data);
+			collectionData = data; // Store for dropdown
+			
+			// Populate dropdown with page items
+			const pageItemSelect = document.getElementById('page-item-select');
+			pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
+			
+			if (data && data.values && data.values.length > 0) {
+				data.values.forEach((item, index) => {
+					const pageUrl = item.page_item_url || `Item ${index + 1}`;
+					const option = document.createElement('option');
+					option.value = index;
+					option.textContent = pageUrl;
+					pageItemSelect.appendChild(option);
+				});
+				pageItemSelect.disabled = false;
 				
-				// Assume first item has the code in 'html' field
-				if (data && data.values && data.values.length > 0 && data.values[0].data.html) {
-					console.log('values[0]', data.values[0]);
+				// Auto-select first item and load its content
+				if (data.values[0] && data.values[0].data && data.values[0].data.html) {
+					pageItemSelect.value = '0';
 					editor.setValue(data.values[0].data.html);
-					alert('Code loaded successfully!');
+					console.log('Loaded first item:', data.values[0]);
+					alert('Collection loaded! Select a page item from dropdown.');
 				} else {
-					alert('No code found in collection or unexpected data format');
-					console.log('Data structure:', data);
+					alert('Collection loaded but no HTML content found in first item.');
 				}
-				
-			} catch (error) {
+			} else {
+				alert('No items found in collection');
+				console.log('Data structure:', data);
+			}
+			
+		} catch (error) {
 				console.error('💥 DETAILED ERROR INFO:');
 				console.error('💥 Error message:', error.message);
 				console.error('💥 Error stack:', error.stack);
@@ -171,15 +188,31 @@
 					return;
 				}
 				
-				console.log(`Saving to Duda: ${siteName}/${collectionName}`);
-				
-				// Create or update collection item using Duda rows API format
-				const payload = {
-					data: {
-						name: 'monaco-editor-code',
-						html: code,
-						lastUpdated: new Date().toISOString()
-					}
+// Check if a page item is selected
+		const pageItemSelect = document.getElementById('page-item-select');
+		const selectedIndex = pageItemSelect.value;
+		
+		if (!selectedIndex || selectedIndex === '') {
+			alert('Please select a page item first');
+			return;
+		}
+		
+		const selectedItem = collectionData.values[parseInt(selectedIndex)];
+		if (!selectedItem) {
+			alert('Selected page item not found');
+			return;
+		}
+		
+		console.log(`Saving to Duda: ${siteName}/${collectionName} - Item: ${selectedItem.page_item_url}`);
+		
+		// Create payload using existing item structure but update the HTML
+		const payload = {
+			data: {
+				...selectedItem.data, // Keep existing data
+				html: code, // Update HTML content
+				lastUpdated: new Date().toISOString()
+			},
+			id: selectedItem.id // Include row ID for updates
 				};
 				
 				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
@@ -210,6 +243,21 @@
 			console.log('🧹 Clear button clicked');
 			if (editor) {
 				editor.setValue('');
+			}
+		});
+
+		// Page item dropdown change handler
+		document.getElementById('page-item-select').addEventListener('change', function() {
+			const selectedIndex = this.value;
+			
+			if (selectedIndex && collectionData && collectionData.values) {
+				const selectedItem = collectionData.values[parseInt(selectedIndex)];
+				if (selectedItem && selectedItem.data && selectedItem.data.html) {
+					console.log('Loading item:', selectedItem.page_item_url);
+					editor.setValue(selectedItem.data.html);
+				} else {
+					editor.setValue('<!-- No HTML content found for this item -->');
+				}
 			}
 		});
 

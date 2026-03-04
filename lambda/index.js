@@ -187,19 +187,37 @@ async function handleCollectionsAPI(path, method, body) {
 
 async function saveToCollection(siteName, collectionName, body) {
   try {
-    // First, get existing collection data to find if our item exists
+    // Check if we have a row ID in the body for direct updates
+    if (body.id) {
+      // Update existing row using rows API with the provided ID
+      const rowId = body.id;
+      console.log(`Updating existing row ${rowId} in collection ${collectionName}`);
+      const updatePath = `/sites/multiscreen/${siteName}/collection/${collectionName}/row/${rowId}`;
+      
+      // Remove id from body as it's not part of the update payload
+      const updatePayload = {
+        data: body.data
+      };
+      
+      return await callDudaAPI('PUT', updatePath, updatePayload);
+    }
+
+    // Fallback: Get existing collection data to find if our item exists
     const getPath = `/sites/multiscreen/${siteName}/collection/${collectionName}`;
     const existingData = await callDudaAPI('GET', getPath);
     
     let existingDataParsed;
+    console.log('Existing collection data:', existingData);
     try {
       existingDataParsed = JSON.parse(existingData.body);
+      console.log('Parsed existing collection data:', existingDataParsed);
     } catch (e) {
       existingDataParsed = { values: [] };
     }
     
     // Look for existing row with same name
-    const targetName = body.name || 'monaco-editor-code';
+    const targetName = body.data?.name || body.name || 'monaco-editor-code';
+    console.log(`Looking for existing row with name: ${targetName}`);
     let existingRow = null;
     let rowId = null;
     
