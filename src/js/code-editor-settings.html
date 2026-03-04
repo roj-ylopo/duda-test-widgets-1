@@ -74,6 +74,23 @@
 		editor = monaco.editor.create(document.getElementById('editor-container'), {
 			});
 		});
+				const urlParams = new URLSearchParams(window.location.search);
+				const {widgetId, accountId, siteId, page, locale, elementId} = Object.fromEntries(urlParams.entries());
+				console.log('URL parameters:', Object.fromEntries(urlParams.entries()));
+				console.log('Widget ID:', widgetId);
+				console.log('Account ID:', accountId);
+				console.log('Site ID:', siteId);
+				console.log('Page:', page);
+				console.log('Locale:', locale);
+				console.log('Element ID:', elementId);
+				//sample URL parameters
+				// accountId: "603e3ab5e36f4c59ab5ad8b507791a53"
+				// elementId: "1701745338"
+				// locale: "en"
+				// page: "about"
+				// siteId: "e3fd21df"
+				// version: "22"
+				// widgetId: "979cb8dd582c4c2f8a362d83f3056018"
 
 		// Load from Duda CMS
 		document.getElementById('load-btn').addEventListener('click', async function () {
@@ -81,8 +98,8 @@
 			alert('Button clicked! Check console for details.');
 			
 			try {
-				const siteName = document.getElementById('site-name').value.trim();
-				const collectionName = document.getElementById('collection-name').value.trim();
+				const siteName = siteId || document.getElementById('site-name').value.trim();
+				const collectionName = document.getElementById('collection-name').value.trim() || 'code-blocks';
 				
 				console.log('📝 Site name:', siteName);
 				console.log('📝 Collection name:', collectionName); 
@@ -161,9 +178,8 @@
 				// 	alert('Collection loaded but no HTML content found in first item.');
 				// }
 
-				// get url parameters asuming that this is loaded in an iframe and log
-				const urlParams = new URLSearchParams(window.location.search);
-				console.log('URL parameters:', Object.fromEntries(urlParams.entries()));
+
+
 			} else {
 				alert('No items found in collection');
 				console.log('Data structure:', data);
