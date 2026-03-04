@@ -149,9 +149,11 @@ async function handleCollectionsAPI(path, method, body) {
   
   switch (method) {
     case 'GET':
+      // Get collection rows
       return await callDudaAPI('GET', dudaPath);
     
     case 'POST':
+      // Save/Update using rows API - find existing or create new
       if (!body) {
         return {
           statusCode: 400,
@@ -159,7 +161,7 @@ async function handleCollectionsAPI(path, method, body) {
           body: JSON.stringify({ error: 'Request body required for POST' })
         };
       }
-      return await callDudaAPI('POST', dudaPath, body);
+      return await saveToCollection(siteName, collectionName, body);
     
     case 'PUT':
       if (!body) {
@@ -180,6 +182,58 @@ async function handleCollectionsAPI(path, method, body) {
         headers: corsHeaders,
         body: JSON.stringify({ error: 'Method not allowed' })
       };
+  }
+}
+
+async function saveToCollection(siteName, collectionName, body) {
+  try {
+    // First, get existing collection data to find if our item exists
+    const getPath = `/sites/multiscreen/${siteName}/collection/${collectionName}`;
+    const existingData = await callDudaAPI('GET', getPath);
+    
+    let existingDataParsed;
+    try {
+      existingDataParsed = JSON.parse(existingData.body);
+    } catch (e) {
+      existingDataParsed = { values: [] };
+    }
+    
+    // Look for existing row with same name
+    const targetName = body.name || 'monaco-editor-code';
+    let existingRow = null;
+    let rowId = null;
+    
+    if (existingDataParsed.values && Array.isArray(existingDataParsed.values)) {
+      existingRow = existingDataParsed.values.find(row => 
+        row.data && row.data.name === targetName
+      );
+      if (existingRow) {
+        rowId = existingRow.id;
+      }
+    }
+    
+    if (rowId) {
+      // Update existing row using rows API
+      console.log(`Updating existing row ${rowId} in collection ${collectionName}`);
+      const updatePath = `/sites/multiscreen/${siteName}/collection/${collectionName}/row/${rowId}`;
+      return await callDudaAPI('PUT', updatePath, body);
+    } else {
+      // Create new row using rows API  
+      console.log(`Creating new row in collection ${collectionName}`);
+      const createPath = `/sites/multiscreen/${siteName}/collection/${collectionName}/row`;
+      return await callDudaAPI('POST', createPath, body);
+    }
+    
+  } catch (error) {
+    console.error('Error in saveToCollection:', error);
+    return {
+      statusCode: 500,
+      headers: corsHeaders,
+      body: JSON.stringify({ 
+        error: 'Failed to save to collection',
+        message: error.message 
+      })
+    };
   }
 }
 

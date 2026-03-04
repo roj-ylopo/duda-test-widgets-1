@@ -173,10 +173,10 @@
 				
 				console.log(`Saving to Duda: ${siteName}/${collectionName}`);
 				
-				// Create or update collection item
+				// Create or update collection item using Duda rows API format
 				const payload = {
-					name: 'monaco-editor-code',
 					data: {
+						name: 'monaco-editor-code',
 						html: code,
 						lastUpdated: new Date().toISOString()
 					}
