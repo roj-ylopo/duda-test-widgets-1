@@ -142,24 +142,28 @@
 			pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
 			
 			if (data && data.values && data.values.length > 0) {
-				data.values.forEach((item, index) => {
-					const pageUrl = item.page_item_url || `Item ${index + 1}`;
-					const option = document.createElement('option');
-					option.value = index;
-					option.textContent = pageUrl;
-					pageItemSelect.appendChild(option);
-				});
-				pageItemSelect.disabled = false;
+				// data.values.forEach((item, index) => {
+				// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
+				// 	const option = document.createElement('option');
+				// 	option.value = index;
+				// 	option.textContent = pageUrl;
+				// 	pageItemSelect.appendChild(option);
+				// });
+				// pageItemSelect.disabled = false;
 				
-				// Auto-select first item and load its content
-				if (data.values[0] && data.values[0].data && data.values[0].data.html) {
-					pageItemSelect.value = '0';
-					editor.setValue(data.values[0].data.html);
-					console.log('Loaded first item:', data.values[0]);
-					alert('Collection loaded! Select a page item from dropdown.');
-				} else {
-					alert('Collection loaded but no HTML content found in first item.');
-				}
+				// // Auto-select first item and load its content
+				// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
+				// 	pageItemSelect.value = '0';
+				// 	editor.setValue(data.values[0].data.html);
+				// 	console.log('Loaded first item:', data.values[0]);
+				// 	alert('Collection loaded! Select a page item from dropdown.');
+				// } else {
+				// 	alert('Collection loaded but no HTML content found in first item.');
+				// }
+
+				// get url parameters asuming that this is loaded in an iframe and log
+				const urlParams = new URLSearchParams(window.location.search);
+				console.log('URL parameters:', Object.fromEntries(urlParams.entries()));
 			} else {
 				alert('No items found in collection');
 				console.log('Data structure:', data);
@@ -252,9 +256,9 @@
 			
 			if (selectedIndex && collectionData && collectionData.values) {
 				const selectedItem = collectionData.values[parseInt(selectedIndex)];
-				if (selectedItem && selectedItem.data && selectedItem.data.html) {
+				if (selectedItem && selectedItem.data && selectedItem.data['editable1-html']) {
 					console.log('Loading item:', selectedItem.page_item_url);
-					editor.setValue(selectedItem.data.html);
+					editor.setValue(selectedItem.data['editable1-html']);
 				} else {
 					editor.setValue('<!-- No HTML content found for this item -->');
 				}
