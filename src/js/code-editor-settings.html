@@ -179,7 +179,7 @@
 				// }
 				console.log('Filtering items for current page:', page);
 				console.log('All items:', data.values);
-				const currentCodeBlocks = data.values.filter(item => item.page_item_url === page);
+				const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
 				console.log('Filtered items for current page:', currentCodeBlocks);
 				editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
 			} else {
