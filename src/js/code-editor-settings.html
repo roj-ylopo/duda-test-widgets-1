@@ -139,8 +139,9 @@
 				console.log('Loaded data from Duda:', data);
 				
 				// Assume first item has the code in 'html' field
-				if (data && data.values && data.values.length > 0 && data.values[0].html) {
-					editor.setValue(data.values[0].html);
+				if (data && data.values && data.values.length > 0 && data.values[0].data.html) {
+					console.log('values[0]', data.values[0]);
+					editor.setValue(data.values[0].data.html);
 					alert('Code loaded successfully!');
 				} else {
 					alert('No code found in collection or unexpected data format');
