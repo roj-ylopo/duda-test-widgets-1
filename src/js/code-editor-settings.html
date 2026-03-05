@@ -50,6 +50,17 @@
 </head>
 <body>
 	<p>Widget ID: {{widgetId}}</p>
+	<div id="params-display" class="config-section" style="margin-bottom: 16px;">
+		<strong>URL Parameters:</strong>
+		<ul style="list-style: none; padding-left: 0; margin: 0;">
+			<li><b>widgetId:</b> <span id="param-widgetId">(loading...)</span></li>
+			<li><b>accountId:</b> <span id="param-accountId">(loading...)</span></li>
+			<li><b>siteId:</b> <span id="param-siteId">(loading...)</span></li>
+			<li><b>page:</b> <span id="param-page">(loading...)</span></li>
+			<li><b>locale:</b> <span id="param-locale">(loading...)</span></li>
+			<li><b>elementId:</b> <span id="param-elementId">(loading...)</span></li>
+		</ul>
+	</div>
 	<!-- <div class="config-section">
 		<label>Site Name: <input type="text" id="site-name" placeholder="your-duda-site" value=""></label>
 		<label>Collection: <input type="text" id="collection-name" placeholder="code-blocks" value="code-blocks"></label>
@@ -82,6 +93,16 @@
 				console.log('Page:', page);
 				console.log('Locale:', locale);
 				console.log('Element ID:', elementId);
+
+				// Display URL params in the UI
+				window.addEventListener('DOMContentLoaded', function() {
+					if (typeof widgetId !== 'undefined') document.getElementById('param-widgetId').textContent = widgetId || '(not set)';
+					if (typeof accountId !== 'undefined') document.getElementById('param-accountId').textContent = accountId || '(not set)';
+					if (typeof siteId !== 'undefined') document.getElementById('param-siteId').textContent = siteId || '(not set)';
+					if (typeof page !== 'undefined') document.getElementById('param-page').textContent = page || '(not set)';
+					if (typeof locale !== 'undefined') document.getElementById('param-locale').textContent = locale || '(not set)';
+					if (typeof elementId !== 'undefined') document.getElementById('param-elementId').textContent = elementId || '(not set)';
+				});
 				//sample URL parameters
 				// accountId: "603e3ab5e36f4c59ab5ad8b507791a53"
 				// elementId: "1701745338"
