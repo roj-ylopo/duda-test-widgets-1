@@ -8,10 +8,12 @@
 		#editor-container,
 		#editor-container-html,
 		#editor-container-css {
-			width: 100%;
-			height: 600px;
+			width: 100% !important;
+			height: 600px !important;
+			min-height: 600px !important;
 			border: 1px solid #ccc;
 			margin-bottom: 16px;
+			position: relative;
 		}
 		.editor-buttons {
 			margin-bottom: 16px;
@@ -89,20 +91,28 @@
 		let currentCodeBlocks = null;
 
 		require(["vs/editor/editor.main"], function () {
+			console.log('🎨 Monaco loaded, creating editors...');
 			htmlEditor = monaco.editor.create(document.getElementById('editor-container-html'), {
-				value: '',
+				value: '<!-- Loading... -->',
 				language: 'html',
-				theme: 'vs-dark',
+				theme: 'vs-light',
 				automaticLayout: true,
-				minimap: { enabled: false }
+				minimap: { enabled: false },
+				wordWrap: 'on',
+				height: 600
 			});
 			cssEditor = monaco.editor.create(document.getElementById('editor-container-css'), {
-				value: '',
+				value: '/* Loading... */',
 				language: 'css',
-				theme: 'vs-dark',
+				theme: 'vs-light',
 				automaticLayout: true,
-				minimap: { enabled: false }
+				minimap: { enabled: false },
+				wordWrap: 'on',
+				height: 600
 			});
+			console.log('✅ Editors created, loading data...');
+			// Load data after editors are ready
+			loadFromDuda();
 		});
 				const urlParams = new URLSearchParams(window.location.search);
 				const {widgetId, accountId, siteId, page, locale, elementId} = Object.fromEntries(urlParams.entries());
@@ -201,8 +211,20 @@
 				currentCodeBlocks = data.values.find(item => item.page_item_url === page);
 				console.log('Filtered items for current page:', currentCodeBlocks);
 				if (htmlEditor && cssEditor) {
-					htmlEditor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
-					cssEditor.setValue(currentCodeBlocks?.data['editable1-css'] || '/* No CSS content found for this page item */');
+					const htmlContent = currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->';
+					const cssContent = currentCodeBlocks?.data['editable1-css'] || '/* No CSS content found for this page item */';
+					console.log('📝 Setting HTML content:', htmlContent.substring(0, 100) + '...');
+					console.log('🎨 Setting CSS content:', cssContent.substring(0, 100) + '...');
+					htmlEditor.setValue(htmlContent);
+					cssEditor.setValue(cssContent);
+					// Force layout update
+					setTimeout(() => {
+						htmlEditor.layout();
+						cssEditor.layout();
+						console.log('✅ Layout updated for both editors');
+					}, 100);
+				} else {
+					console.error('❌ Editors not ready yet!');
 				}
 			} else {
 				alert('No items found in collection');
@@ -219,23 +241,27 @@
 			
 		}
 		
-		loadFromDuda();
-
 		// Tab switching logic
 		function setActiveTab(tab) {
+			console.log('🔄 Switching to tab:', tab);
 			document.getElementById('tab-html').style.background = tab === 'html' ? '#f5f5f5' : '#e0e0e0';
 			document.getElementById('tab-css').style.background = tab === 'css' ? '#f5f5f5' : '#e0e0e0';
 			document.getElementById('editor-container-html').style.display = tab === 'html' ? 'block' : 'none';
 			document.getElementById('editor-container-css').style.display = tab === 'css' ? 'block' : 'none';
 			if (htmlEditor && cssEditor) {
-				htmlEditor.layout();
-				cssEditor.layout();
+				setTimeout(() => {
+					htmlEditor.layout();
+					cssEditor.layout();
+					console.log('✅ Layout updated after tab switch to:', tab);
+				}, 50);
 			}
 		}
 		document.getElementById('tab-html').addEventListener('click', function() { setActiveTab('html'); });
 		document.getElementById('tab-css').addEventListener('click', function() { setActiveTab('css'); });
-		// Default to HTML tab
-		setActiveTab('html');
+		// Default to HTML tab - delay to ensure editors are ready
+		setTimeout(() => {
+			setActiveTab('html');
+		}, 200);
 		// Save to Duda CMS
 		document.getElementById('save-btn').addEventListener('click', async function () {
 			if (!htmlEditor || !cssEditor || !currentCodeBlocks) return;
