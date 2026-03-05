@@ -100,11 +100,11 @@
 			console.log('📝 Collection name:', collectionName); 
 			console.log('🌐 Lambda URL:', LAMBDA_BASE_URL);
 			
-			if (!siteName) {
-				console.log('❌ No site name provided');
-				alert('Please enter a site name');
-				return;
-			}
+			// if (!siteName) {
+			// 	console.log('❌ No site name provided');
+			// 	alert('Please enter a site name');
+			// 	return;
+			// }
 			
 			console.log(`🚀 About to fetch from: ${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`);
 			
@@ -125,7 +125,7 @@
 				
 				if (!collections.find(c => c.name === collectionName)) {
 					alert(`Collection "${collectionName}" not found. Available collections: ${collections.map(c => c.name).join(', ')}`);
-					return;
+					// return;
 				}
 			} else {
 				console.log('❌ List collections failed, continuing anyway...');
