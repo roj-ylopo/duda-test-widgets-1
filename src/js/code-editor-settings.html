@@ -50,11 +50,11 @@
 </head>
 <body>
 	<p>Widget ID: {{widgetId}}</p>
-	<div class="config-section">
+	<!-- <div class="config-section">
 		<label>Site Name: <input type="text" id="site-name" placeholder="your-duda-site" value=""></label>
 		<label>Collection: <input type="text" id="collection-name" placeholder="code-blocks" value="code-blocks"></label>
 		<label>Page Item: <select id="page-item-select" disabled><option value="">Load collection first</option></select></label>
-	</div>
+	</div> -->
 	<div class="editor-buttons">
 		<button id="load-btn">Load from Duda</button>
 		<button id="save-btn">Save to Duda</button>
@@ -98,8 +98,8 @@
 			alert('Button clicked! Check console for details.');
 			
 			try {
-				const siteName = siteId || document.getElementById('site-name').value.trim();
-				const collectionName = document.getElementById('collection-name').value.trim() || 'code-blocks';
+				const siteName = siteId;
+				const collectionName = 'code-blocks';
 				
 				console.log('📝 Site name:', siteName);
 				console.log('📝 Collection name:', collectionName); 
@@ -155,8 +155,8 @@
 			collectionData = data; // Store for dropdown
 			
 			// Populate dropdown with page items
-			const pageItemSelect = document.getElementById('page-item-select');
-			pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
+			// const pageItemSelect = document.getElementById('page-item-select');
+			// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
 			
 			if (data && data.values && data.values.length > 0) {
 				// data.values.forEach((item, index) => {
