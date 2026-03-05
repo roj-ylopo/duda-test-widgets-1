@@ -56,7 +56,6 @@
 		<label>Page Item: <select id="page-item-select" disabled><option value="">Load collection first</option></select></label>
 	</div> -->
 	<div class="editor-buttons">
-		<button id="load-btn">Load from Duda</button>
 		<button id="save-btn">Save to Duda</button>
 		<button id="clear-btn">Clear</button>
 	</div>
@@ -93,108 +92,103 @@
 				// widgetId: "979cb8dd582c4c2f8a362d83f3056018"
 
 		// Load from Duda CMS
-		document.getElementById('load-btn').addEventListener('click', async function () {
-			console.log('🔄 BUTTON CLICKED! Starting load process...');
-			alert('Button clicked! Check console for details.');
+		try {
+			const siteName = siteId;
+			const collectionName = 'code-blocks';
 			
-			try {
-				const siteName = siteId;
-				const collectionName = 'code-blocks';
+			console.log('📝 Site name:', siteName);
+			console.log('📝 Collection name:', collectionName); 
+			console.log('🌐 Lambda URL:', LAMBDA_BASE_URL);
+			
+			if (!siteName) {
+				console.log('❌ No site name provided');
+				alert('Please enter a site name');
+				return;
+			}
+			
+			console.log(`🚀 About to fetch from: ${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`);
+			
+			// First, try to list all collections to see what exists
+			console.log('Step 1: Listing all collections...');
+			const listResponse = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			
+			console.log('📡 Response received:', listResponse);
+			
+			if (listResponse.ok) {
+				const collections = await listResponse.json();
+				console.log('Available collections:', collections);
 				
-				console.log('📝 Site name:', siteName);
-				console.log('📝 Collection name:', collectionName); 
-				console.log('🌐 Lambda URL:', LAMBDA_BASE_URL);
-				
-				if (!siteName) {
-					console.log('❌ No site name provided');
-					alert('Please enter a site name');
+				if (!collections.find(c => c.name === collectionName)) {
+					alert(`Collection "${collectionName}" not found. Available collections: ${collections.map(c => c.name).join(', ')}`);
 					return;
 				}
-				
-				console.log(`🚀 About to fetch from: ${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`);
-				
-				// First, try to list all collections to see what exists
-				console.log('Step 1: Listing all collections...');
-				const listResponse = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
-				
-				console.log('📡 Response received:', listResponse);
-				
-				if (listResponse.ok) {
-					const collections = await listResponse.json();
-					console.log('Available collections:', collections);
-					
-					if (!collections.find(c => c.name === collectionName)) {
-						alert(`Collection "${collectionName}" not found. Available collections: ${collections.map(c => c.name).join(', ')}`);
-						return;
-					}
-				} else {
-					console.log('❌ List collections failed, continuing anyway...');
-				}
-				
-				// Now try to get the specific collection
-				console.log('Step 2: Getting collection data...');
-				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
-					method: 'GET',
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				});
-				
-				if (!response.ok) {
-					const error = await response.text();
-					throw new Error(`HTTP ${response.status}: ${error}`);
-				}
-				
-				const data = await response.json();
-				console.log('Loaded data from Duda:', data);
-			collectionData = data; // Store for dropdown
-			
-			// Populate dropdown with page items
-			// const pageItemSelect = document.getElementById('page-item-select');
-			// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
-			
-			if (data && data.values && data.values.length > 0) {
-				// data.values.forEach((item, index) => {
-				// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
-				// 	const option = document.createElement('option');
-				// 	option.value = index;
-				// 	option.textContent = pageUrl;
-				// 	pageItemSelect.appendChild(option);
-				// });
-				// pageItemSelect.disabled = false;
-				
-				// // Auto-select first item and load its content
-				// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
-				// 	pageItemSelect.value = '0';
-				// 	editor.setValue(data.values[0].data.html);
-				// 	console.log('Loaded first item:', data.values[0]);
-				// 	alert('Collection loaded! Select a page item from dropdown.');
-				// } else {
-				// 	alert('Collection loaded but no HTML content found in first item.');
-				// }
-				console.log('Filtering items for current page:', page);
-				console.log('All items:', data.values);
-				const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
-				console.log('Filtered items for current page:', currentCodeBlocks);
-				editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
 			} else {
-				alert('No items found in collection');
-				console.log('Data structure:', data);
+				console.log('❌ List collections failed, continuing anyway...');
 			}
 			
-		} catch (error) {
-				console.error('💥 DETAILED ERROR INFO:');
-				console.error('💥 Error message:', error.message);
-				console.error('💥 Error stack:', error.stack);
-				console.error('💥 Full error object:', error);
-				alert('Load failed: ' + error.message + '. Check console for details.');
+			// Now try to get the specific collection
+			console.log('Step 2: Getting collection data...');
+			const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+			
+			if (!response.ok) {
+				const error = await response.text();
+				throw new Error(`HTTP ${response.status}: ${error}`);
 			}
-		});
+			
+			const data = await response.json();
+			console.log('Loaded data from Duda:', data);
+		collectionData = data; // Store for dropdown
+		
+		// Populate dropdown with page items
+		// const pageItemSelect = document.getElementById('page-item-select');
+		// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
+		
+		if (data && data.values && data.values.length > 0) {
+			// data.values.forEach((item, index) => {
+			// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
+			// 	const option = document.createElement('option');
+			// 	option.value = index;
+			// 	option.textContent = pageUrl;
+			// 	pageItemSelect.appendChild(option);
+			// });
+			// pageItemSelect.disabled = false;
+			
+			// // Auto-select first item and load its content
+			// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
+			// 	pageItemSelect.value = '0';
+			// 	editor.setValue(data.values[0].data.html);
+			// 	console.log('Loaded first item:', data.values[0]);
+			// 	alert('Collection loaded! Select a page item from dropdown.');
+			// } else {
+			// 	alert('Collection loaded but no HTML content found in first item.');
+			// }
+			console.log('Filtering items for current page:', page);
+			console.log('All items:', data.values);
+			const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
+			console.log('Filtered items for current page:', currentCodeBlocks);
+			editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
+		} else {
+			alert('No items found in collection');
+			console.log('Data structure:', data);
+		}
+		
+	} catch (error) {
+			console.error('💥 DETAILED ERROR INFO:');
+			console.error('💥 Error message:', error.message);
+			console.error('💥 Error stack:', error.stack);
+			console.error('💥 Full error object:', error);
+			alert('Load failed: ' + error.message + '. Check console for details.');
+		}
 
 		// Save to Duda CMS
 		document.getElementById('save-btn').addEventListener('click', async function () {
