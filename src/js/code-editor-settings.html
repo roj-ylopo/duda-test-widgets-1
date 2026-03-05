@@ -53,7 +53,6 @@
 	<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
 </head>
 <body>
-	<p>Widget ID: {{widgetId}}</p>
 	<div id="params-display" class="config-section" style="margin-bottom: 16px;">
 		<strong>URL Parameters:</strong>
 		<ul style="list-style: none; padding-left: 0; margin: 0;">
@@ -95,7 +94,7 @@
 			htmlEditor = monaco.editor.create(document.getElementById('editor-container-html'), {
 				value: '<!-- Loading... -->',
 				language: 'html',
-				theme: 'vs-light',
+				theme: 'vs-dark',
 				automaticLayout: true,
 				minimap: { enabled: false },
 				wordWrap: 'on',
@@ -104,7 +103,7 @@
 			cssEditor = monaco.editor.create(document.getElementById('editor-container-css'), {
 				value: '/* Loading... */',
 				language: 'css',
-				theme: 'vs-light',
+				theme: 'vs-dark',
 				automaticLayout: true,
 				minimap: { enabled: false },
 				wordWrap: 'on',
