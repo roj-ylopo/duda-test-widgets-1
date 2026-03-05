@@ -70,18 +70,36 @@
 		<button id="save-btn">Save to Duda</button>
 		<button id="clear-btn">Clear</button>
 	</div>
-	<div id="editor-container"></div>
+	<div style="margin-bottom: 8px;">
+		<button id="tab-html" class="tab-btn" style="padding: 6px 16px; border-radius: 4px 4px 0 0; border: 1px solid #ccc; border-bottom: none; background: #f5f5f5; cursor: pointer;">HTML</button>
+		<button id="tab-css" class="tab-btn" style="padding: 6px 16px; border-radius: 4px 4px 0 0; border: 1px solid #ccc; border-bottom: none; background: #e0e0e0; cursor: pointer;">CSS</button>
+	</div>
+	<div id="editor-container-html" style="display: block;"></div>
+	<div id="editor-container-css" style="display: none;"></div>
 	<script>
 		// Configuration - Replace with your Lambda function URL
 		const LAMBDA_BASE_URL = 'https://t3gv3b9s61.execute-api.us-west-1.amazonaws.com/dev'; // Your actual API Gateway URL
 		
 		// Monaco loader config
 		require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
-		let editor;
-	let collectionData = null; // Store loaded collection data
-	
-	require(["vs/editor/editor.main"], function () {
-		editor = monaco.editor.create(document.getElementById('editor-container'), {
+		let htmlEditor, cssEditor;
+		let collectionData = null; // Store loaded collection data
+		let currentCodeBlocks = null;
+
+		require(["vs/editor/editor.main"], function () {
+			htmlEditor = monaco.editor.create(document.getElementById('editor-container-html'), {
+				value: '',
+				language: 'html',
+				theme: 'vs-dark',
+				automaticLayout: true,
+				minimap: { enabled: false }
+			});
+			cssEditor = monaco.editor.create(document.getElementById('editor-container-css'), {
+				value: '',
+				language: 'css',
+				theme: 'vs-dark',
+				automaticLayout: true,
+				minimap: { enabled: false }
 			});
 		});
 				const urlParams = new URLSearchParams(window.location.search);
@@ -176,29 +194,14 @@
 			// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
 			
 			if (data && data.values && data.values.length > 0) {
-				// data.values.forEach((item, index) => {
-				// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
-				// 	const option = document.createElement('option');
-				// 	option.value = index;
-				// 	option.textContent = pageUrl;
-				// 	pageItemSelect.appendChild(option);
-				// });
-				// pageItemSelect.disabled = false;
-				
-				// // Auto-select first item and load its content
-				// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
-				// 	pageItemSelect.value = '0';
-				// 	editor.setValue(data.values[0].data.html);
-				// 	console.log('Loaded first item:', data.values[0]);
-				// 	alert('Collection loaded! Select a page item from dropdown.');
-				// } else {
-				// 	alert('Collection loaded but no HTML content found in first item.');
-				// }
 				console.log('Filtering items for current page:', page);
 				console.log('All items:', data.values);
-				const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
+				currentCodeBlocks = data.values.find(item => item.page_item_url === page);
 				console.log('Filtered items for current page:', currentCodeBlocks);
-				editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
+				if (htmlEditor && cssEditor) {
+					htmlEditor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
+					cssEditor.setValue(currentCodeBlocks?.data['editable1-css'] || '/* No CSS content found for this page item */');
+				}
 			} else {
 				alert('No items found in collection');
 				console.log('Data structure:', data);
@@ -215,47 +218,45 @@
 		}
 		
 		loadFromDuda();
+
+		// Tab switching logic
+		function setActiveTab(tab) {
+			document.getElementById('tab-html').style.background = tab === 'html' ? '#f5f5f5' : '#e0e0e0';
+			document.getElementById('tab-css').style.background = tab === 'css' ? '#f5f5f5' : '#e0e0e0';
+			document.getElementById('editor-container-html').style.display = tab === 'html' ? 'block' : 'none';
+			document.getElementById('editor-container-css').style.display = tab === 'css' ? 'block' : 'none';
+			if (htmlEditor && cssEditor) {
+				htmlEditor.layout();
+				cssEditor.layout();
+			}
+		}
+		document.getElementById('tab-html').addEventListener('click', function() { setActiveTab('html'); });
+		document.getElementById('tab-css').addEventListener('click', function() { setActiveTab('css'); });
+		// Default to HTML tab
+		setActiveTab('html');
 		// Save to Duda CMS
 		document.getElementById('save-btn').addEventListener('click', async function () {
-			if (!editor) return;
-			
+			if (!htmlEditor || !cssEditor || !currentCodeBlocks) return;
 			try {
-				const siteName = document.getElementById('site-name').value.trim();
-				const collectionName = document.getElementById('collection-name').value.trim();
-				const code = editor.getValue();
-				
+				// Use current page's code block item
+				const siteName = siteId;
+				const collectionName = 'code-blocks';
+				const htmlCode = htmlEditor.getValue();
+				const cssCode = cssEditor.getValue();
 				if (!siteName) {
 					alert('Please enter a site name');
 					return;
 				}
-				
-// Check if a page item is selected
-		// const pageItemSelect = document.getElementById('page-item-select');
-		// const selectedIndex = pageItemSelect.value;
-		
-		// if (!selectedIndex || selectedIndex === '') {
-		// 	alert('Please select a page item first');
-		// 	return;
-		// }
-		
-		// const selectedItem = collectionData.values[parseInt(selectedIndex)];
-		// if (!selectedItem) {
-		// 	alert('Selected page item not found');
-		// 	return;
-		// }
-		
-		console.log(`Saving to Duda: ${siteName}/${collectionName} - Item: ${selectedItem.page_item_url}`);
-		
-		// Create payload using existing item structure but update the HTML
-		const payload = {
-			data: {
-				...selectedItem.data, // Keep existing data
-				html: code, // Update HTML content
-				lastUpdated: new Date().toISOString()
-			},
-			id: selectedItem.id // Include row ID for updates
+				// Create payload using existing item structure but update the HTML and CSS
+				const payload = {
+					data: {
+						...currentCodeBlocks.data,
+						'editable1-html': htmlCode,
+						'editable1-css': cssCode,
+						lastUpdated: new Date().toISOString()
+					},
+					id: currentCodeBlocks.id
 				};
-				
 				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
 					method: 'POST',
 					headers: {
@@ -263,16 +264,13 @@
 					},
 					body: JSON.stringify(payload)
 				});
-				
 				if (!response.ok) {
 					const error = await response.text();
 					throw new Error(`HTTP ${response.status}: ${error}`);
 				}
-				
 				const result = await response.json();
 				console.log('Save result:', result);
 				alert('Code saved successfully to Duda!');
-				
 			} catch (error) {
 				console.error('Save failed:', error);
 				alert('Save failed: ' + error.message);
@@ -282,9 +280,8 @@
 		// Clear button handler
 		document.getElementById('clear-btn').addEventListener('click', function () {
 			console.log('🧹 Clear button clicked');
-			if (editor) {
-				editor.setValue('');
-			}
+			if (htmlEditor) htmlEditor.setValue('');
+			if (cssEditor) cssEditor.setValue('');
 		});
 
 		// // Page item dropdown change handler
