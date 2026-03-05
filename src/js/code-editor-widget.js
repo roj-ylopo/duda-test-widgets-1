@@ -178,6 +178,7 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
+    console.log('options:', options);
     dmAPI.getCollection({collectionName: 'code-blocks'}).then(
       function(data){ 
         console.log(data); 
