@@ -92,7 +92,8 @@
 				// widgetId: "979cb8dd582c4c2f8a362d83f3056018"
 
 		// Load from Duda CMS
-		try {
+		async function loadFromDuda() {
+			try {
 			const siteName = siteId;
 			const collectionName = 'code-blocks';
 			
@@ -147,48 +148,51 @@
 			
 			const data = await response.json();
 			console.log('Loaded data from Duda:', data);
-		collectionData = data; // Store for dropdown
-		
-		// Populate dropdown with page items
-		// const pageItemSelect = document.getElementById('page-item-select');
-		// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
-		
-		if (data && data.values && data.values.length > 0) {
-			// data.values.forEach((item, index) => {
-			// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
-			// 	const option = document.createElement('option');
-			// 	option.value = index;
-			// 	option.textContent = pageUrl;
-			// 	pageItemSelect.appendChild(option);
-			// });
-			// pageItemSelect.disabled = false;
+			collectionData = data; // Store for dropdown
 			
-			// // Auto-select first item and load its content
-			// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
-			// 	pageItemSelect.value = '0';
-			// 	editor.setValue(data.values[0].data.html);
-			// 	console.log('Loaded first item:', data.values[0]);
-			// 	alert('Collection loaded! Select a page item from dropdown.');
-			// } else {
-			// 	alert('Collection loaded but no HTML content found in first item.');
-			// }
-			console.log('Filtering items for current page:', page);
-			console.log('All items:', data.values);
-			const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
-			console.log('Filtered items for current page:', currentCodeBlocks);
-			editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
-		} else {
-			alert('No items found in collection');
-			console.log('Data structure:', data);
+			// Populate dropdown with page items
+			// const pageItemSelect = document.getElementById('page-item-select');
+			// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
+			
+			if (data && data.values && data.values.length > 0) {
+				// data.values.forEach((item, index) => {
+				// 	const pageUrl = item.page_item_url || `Item ${index + 1}`;
+				// 	const option = document.createElement('option');
+				// 	option.value = index;
+				// 	option.textContent = pageUrl;
+				// 	pageItemSelect.appendChild(option);
+				// });
+				// pageItemSelect.disabled = false;
+				
+				// // Auto-select first item and load its content
+				// if (data.values[0] && data.values[0].data && data.values[0].data.html) {
+				// 	pageItemSelect.value = '0';
+				// 	editor.setValue(data.values[0].data.html);
+				// 	console.log('Loaded first item:', data.values[0]);
+				// 	alert('Collection loaded! Select a page item from dropdown.');
+				// } else {
+				// 	alert('Collection loaded but no HTML content found in first item.');
+				// }
+				console.log('Filtering items for current page:', page);
+				console.log('All items:', data.values);
+				const currentCodeBlocks = data.values.find(item => item.page_item_url === page);
+				console.log('Filtered items for current page:', currentCodeBlocks);
+				editor.setValue(currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->');
+			} else {
+				alert('No items found in collection');
+				console.log('Data structure:', data);
+			}
+			
+		} catch (error) {
+				console.error('💥 DETAILED ERROR INFO:');
+				console.error('💥 Error message:', error.message);
+				console.error('💥 Error stack:', error.stack);
+				console.error('💥 Full error object:', error);
+				alert('Load failed: ' + error.message + '. Check console for details.');
+			}
+			
 		}
 		
-	} catch (error) {
-			console.error('💥 DETAILED ERROR INFO:');
-			console.error('💥 Error message:', error.message);
-			console.error('💥 Error stack:', error.stack);
-			console.error('💥 Full error object:', error);
-			alert('Load failed: ' + error.message + '. Check console for details.');
-		}
 
 		// Save to Duda CMS
 		document.getElementById('save-btn').addEventListener('click', async function () {
