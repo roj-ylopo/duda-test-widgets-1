@@ -183,7 +183,7 @@
         console.log(data); 
         console.log('getting current code from collection');
         console.log('first item in collection:', data[0]);
-        const currentCode = data[0].data.html; // Assuming you want the HTML from the first item in the collection
+        const currentCode = data[0].data['editable1-html']; // Assuming you want the HTML from the first item in the collection
         console.log('Current code from collection:', currentCode);
         currentCode ? container.innerHTML = currentCode : container.innerHTML = '<p>No code found in collections.</p>';
       }
