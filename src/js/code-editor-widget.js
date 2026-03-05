@@ -178,14 +178,19 @@
   }
   function createCodeEditor(options) {
     const {container, props} = options;
+    const {debugData} = props;
+    const {elementId, isEditor, widgetId, siteId, page} = debugData || {};
+    
     console.log('options:', options);
     dmAPI.getCollection({collectionName: 'code-blocks'}).then(
       function(data){ 
         console.log(data); 
         console.log('getting current code from collection');
         console.log('first item in collection:', data[0]);
-        const currentCode = data[0].data['editable1-html']; // Assuming you want the HTML from the first item in the collection
-        const currentCss = data[0].data['editable1-css'];
+        const currentData = data.find(item => item.page_item_url === page);
+        console.log('currentData for this page:', currentData);
+        const currentCode = currentData ? currentData.data['editable1-html'] : null; // Assuming you want the HTML from the first item in the collection
+        const currentCss = currentData ? currentData.data['editable1-css'] : null;
         console.log('Current code from collection:', currentCode);
         console.log('Current CSS from collection:', currentCss);
         // Inject CSS as a <style> tag scoped to this container
