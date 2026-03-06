@@ -216,8 +216,10 @@
       const collection = await dmAPI.loadCollectionsAPI();
       console.log('Collections API loaded:', collection);
       const codeBlocks =  await collection.data('code-blocks-v2').get();
-      console.log(`JSON.parse(item.data['assignedTo'])JSON.parse(item.data['assignedTo'])`, codeBlocks.values.map(item => JSON.parse(item.data['assignedTo'])));
-      const currentData = codeBlocks.values.find(item => item.page_item_url === page && (JSON.parse(item.data['assignedTo'])).includes(elementId));
+      console.log(`JSON.parse(item.data['assignedTo'])JSON.parse(item.data['assignedTo'])`, codeBlocks.values.map(item => JSON.parse(item.data['assignedTo'].replace(/'/g, '"'))));
+      // below, item.data['assignedTo'] is a string that looks like '["elementId1", "elementId2"]', so we need to parse it to check if it includes our current elementId
+      
+      const currentData = codeBlocks.values.find(item => item.page_item_url === page && (JSON.parse(item.data['assignedTo'].replace(/'/g, '"'))).includes(elementId));
       console.log('currentData for this page:', currentData);
       const currentCode = currentData ? currentData.data['HTML'] : null; // Assuming you want the HTML from the first item in the collection
       const currentCss = currentData ? currentData.data['CSS'] : null;
