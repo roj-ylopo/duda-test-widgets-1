@@ -182,6 +182,7 @@
     const {elementId, isEditor, widgetId, siteId, page} = debugData || {};
     
     console.log('options:', options);
+    console.log('props:', props);
   
     // dmAPI.getCollection({collectionName: 'code-blocks'}).then(
     //   function(data){ 
