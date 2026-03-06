@@ -178,10 +178,11 @@
   }
   async function createCodeEditor(options) {
     const {container, props} = options;
-    const {debugData} = props;
+    const {debugData, element} = props;
     const {elementId, isEditor, widgetId, siteId, page} = debugData || {};
     
     console.log('options:', options);
+  
     // dmAPI.getCollection({collectionName: 'code-blocks'}).then(
     //   function(data){ 
     //     console.log(data); 
