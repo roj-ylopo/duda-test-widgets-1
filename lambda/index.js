@@ -192,14 +192,15 @@ async function saveToCollection(siteName, collectionName, body) {
       // Update existing row using rows API with the provided ID
       const rowId = body.id;
       console.log(`Updating existing row ${rowId} in collection ${collectionName}`);
-      const updatePath = `/sites/multiscreen/${siteName}/collection/${collectionName}/row/${rowId}`;
+      const updatePath = `/sites/multiscreen/${siteName}/collection/${collectionName}/row`;
       
       // Remove id from body as it's not part of the update payload
-      const updatePayload = {
-        data: body.data
-      };
+      // const updatePayload = {
+      //   data: body.data
+      // };
+      console.log('Update payload:', body);
       
-      return await callDudaAPI('PUT', updatePath, updatePayload);
+      return await callDudaAPI('PUT', updatePath, [body]);
     }
 
     // Fallback: Get existing collection data to find if our item exists
