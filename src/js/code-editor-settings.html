@@ -275,14 +275,20 @@
 					return;
 				}
 				// Create payload using existing item structure but update the HTML and CSS
-				const payload = {
-					data: {
-						...currentCodeBlocks.data,
-						'editable1-html': htmlCode,
-						'editable1-css': cssCode,
-					},
-					id: currentCodeBlocks.id
-				};
+				let payload = currentCodeBlocks;
+				payload.data = {
+					...currentCodeBlocks.data,
+					'editable1-html': htmlCode,
+					'editable1-css': cssCode,
+				}
+				// {
+				// 	data: {
+				// 		...currentCodeBlocks.data,
+				// 		'editable1-html': htmlCode,
+				// 		'editable1-css': cssCode,
+				// 	},
+				// 	id: currentCodeBlocks.id
+				// };
 				const response = await fetch(`${LAMBDA_BASE_URL}/api/sites/${siteName}/collections/${collectionName}`, {
 					method: 'POST',
 					headers: {
