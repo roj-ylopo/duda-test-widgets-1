@@ -198,9 +198,9 @@ async function saveToCollection(siteName, collectionName, body) {
       // const updatePayload = {
       //   data: body.data
       // };
-      console.log('Update payload:', body.data);
+      console.log('Update payload:', body);
       
-      return await callDudaAPI('PUT', updatePath, updatePayload);
+      return await callDudaAPI('PUT', updatePath, [body]);
     }
 
     // Fallback: Get existing collection data to find if our item exists
