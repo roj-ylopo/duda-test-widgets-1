@@ -216,7 +216,9 @@
       const collection = await dmAPI.loadCollectionsAPI();
       console.log('Collections API loaded:', collection);
       const codeBlocks =  await collection.data('code-blocks-v2').get();
-      console.log(`item.data['assignedTo'])`, codeBlocks.values.map(item => item.data['assignedTo'].split(',')));
+      console.log('elementId:', elementId);
+      console.log(`item.data['assignedTo'])`, codeBlocks.values.find(item => item.data['assignedTo'].split(',')));
+      console.log('isFound?', codeBlocks.values.some(item => item.data['assignedTo'].split(',').includes(elementId)));
       //sample assignedTo: "123456,123423"
       const currentData = codeBlocks.values.find(item => item.page_item_url === page && item.data['assignedTo'].split(',').includes(elementId));
       console.log('currentData for this page:', currentData);
