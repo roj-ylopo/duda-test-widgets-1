@@ -176,40 +176,66 @@
     document.head.appendChild(link);
   }
   }
-  function createCodeEditor(options) {
+  async function createCodeEditor(options) {
     const {container, props} = options;
     const {debugData} = props;
     const {elementId, isEditor, widgetId, siteId, page} = debugData || {};
     
     console.log('options:', options);
-    dmAPI.getCollection({collectionName: 'code-blocks'}).then(
-      function(data){ 
-        console.log(data); 
-        console.log('getting current code from collection');
-        console.log('first item in collection:', data[0]);
-        const currentData = data.find(item => item.page_item_url === page);
-        console.log('currentData for this page:', currentData);
-        const currentCode = currentData ? currentData.data['editable1-html'] : null; // Assuming you want the HTML from the first item in the collection
-        const currentCss = currentData ? currentData.data['editable1-css'] : null;
-        console.log('Current code from collection:', currentCode);
-        console.log('Current CSS from collection:', currentCss);
-        // Inject CSS as a <style> tag scoped to this container
-        if (currentCss) {
-          // Remove any previous style tag added by this widget
-          let styleTag = container.querySelector('style[data-widget-css]');
-          if (styleTag) styleTag.remove();
-          styleTag = document.createElement('style');
-          styleTag.setAttribute('data-widget-css', 'true');
-          styleTag.textContent = currentCss;
-          container.prepend(styleTag);
-        }
-        currentCode ? container.innerHTML += currentCode : container.innerHTML += '<p>No code found in collections.</p>';
-        console.log('container', container);
+    // dmAPI.getCollection({collectionName: 'code-blocks'}).then(
+    //   function(data){ 
+    //     console.log(data); 
+    //     console.log('getting current code from collection');
+    //     console.log('first item in collection:', data[0]);
+    //     const currentData = data.find(item => item.page_item_url === page);
+    //     console.log('currentData for this page:', currentData);
+    //     const currentCode = currentData ? currentData.data['editable1-html'] : null; // Assuming you want the HTML from the first item in the collection
+    //     const currentCss = currentData ? currentData.data['editable1-css'] : null;
+    //     console.log('Current code from collection:', currentCode);
+    //     console.log('Current CSS from collection:', currentCss);
+    //     // Inject CSS as a <style> tag scoped to this container
+    //     if (currentCss) {
+    //       // Remove any previous style tag added by this widget
+    //       let styleTag = container.querySelector('style[data-widget-css]');
+    //       if (styleTag) styleTag.remove();
+    //       styleTag = document.createElement('style');
+    //       styleTag.setAttribute('data-widget-css', 'true');
+    //       styleTag.textContent = currentCss;
+    //       container.prepend(styleTag);
+    //     }
+    //     currentCode ? container.innerHTML += currentCode : container.innerHTML += '<p>No code found in collections.</p>';
+    //     console.log('container', container);
+    //   }
+    // ).catch(function(error) {
+    //   console.error('Failed to load code from collection:', error);
+    //   container.innerHTML = '<p>Error loading code. Please check console for details.</p>';
+    // });
+    try{
+      const collection = await dmAPI.loadCollectionsAPI();
+      const codeBlocks =  await collection.data('code-blocks').get();
+      const currentData = codeBlocks.values.find(item => item.page_item_url === page);
+      console.log('currentData for this page:', currentData);
+      const currentCode = currentData ? currentData.data['editable1-html'] : null; // Assuming you want the HTML from the first item in the collection
+      const currentCss = currentData ? currentData.data['editable1-css'] : null;
+      console.log('Current code from collection:', currentCode);
+      console.log('Current CSS from collection:', currentCss);
+      if (currentCss) {
+        // Remove any previous style tag added by this widget
+        let styleTag = container.querySelector('style[data-widget-css]');
+        if (styleTag) styleTag.remove();
+        styleTag = document.createElement('style');
+        styleTag.setAttribute('data-widget-css', 'true');
+        styleTag.textContent = currentCss;
+        container.prepend(styleTag);
       }
-    ).catch(function(error) {
+      currentCode ? container.innerHTML += currentCode : container.innerHTML += '<p>No code found in collections.</p>';
+      console.log('container', container);
+
+    } catch(error) {
       console.error('Failed to load code from collection:', error);
       container.innerHTML = '<p>Error loading code. Please check console for details.</p>';
-    });
+    }
+
   }
 
   var handler = {
