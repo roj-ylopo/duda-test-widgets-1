@@ -215,11 +215,12 @@
     try{
       const collection = await dmAPI.loadCollectionsAPI();
       console.log('Collections API loaded:', collection);
-      const codeBlocks =  await collection.data('code-blocks').get();
-      const currentData = codeBlocks.values.find(item => item.page_item_url === page);
+      const codeBlocks =  await collection.data('code-blocks-v2').get();
+      console.log(`JSON.parse(item.data['assignedTo'])JSON.parse(item.data['assignedTo'])`, codeBlocks.values.map(item => JSON.parse(item.data['assignedTo'])));
+      const currentData = codeBlocks.values.find(item => item.page_item_url === page && (JSON.parse(item.data['assignedTo'])).includes(elementId));
       console.log('currentData for this page:', currentData);
-      const currentCode = currentData ? currentData.data['editable1-html'] : null; // Assuming you want the HTML from the first item in the collection
-      const currentCss = currentData ? currentData.data['editable1-css'] : null;
+      const currentCode = currentData ? currentData.data['HTML'] : null; // Assuming you want the HTML from the first item in the collection
+      const currentCss = currentData ? currentData.data['CSS'] : null;
       console.log('Current code from collection:', currentCode);
       console.log('Current CSS from collection:', currentCss);
       if (currentCss) {
