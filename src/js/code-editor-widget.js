@@ -212,6 +212,7 @@
     // });
     try{
       const collection = await dmAPI.loadCollectionsAPI();
+      console.log('Collections API loaded:', collection);
       const codeBlocks =  await collection.data('code-blocks').get();
       const currentData = codeBlocks.values.find(item => item.page_item_url === page);
       console.log('currentData for this page:', currentData);
