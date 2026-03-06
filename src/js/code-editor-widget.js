@@ -216,9 +216,9 @@
       const collection = await dmAPI.loadCollectionsAPI();
       console.log('Collections API loaded:', collection);
       const codeBlocks =  await collection.data('code-blocks-v2').get();
-      console.log(`item.data['assignedTo'])`, codeBlocks.values.map(item => item.data['assignedTo'].split(',').map(id => id.trim())));
+      console.log(`item.data['assignedTo'])`, codeBlocks.values.map(item => item.data['assignedTo'].split(',')));
       //sample assignedTo: "123456,123423"
-      const currentData = codeBlocks.values.find(item => item.page_item_url === page && item.data['assignedTo'].split(',').map(id => id.trim()).includes(elementId));
+      const currentData = codeBlocks.values.find(item => item.page_item_url === page && item.data['assignedTo'].split(',').includes(elementId));
       console.log('currentData for this page:', currentData);
       const currentCode = currentData ? currentData.data['HTML'] : null; // Assuming you want the HTML from the first item in the collection
       const currentCss = currentData ? currentData.data['CSS'] : null;
