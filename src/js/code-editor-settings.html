@@ -296,19 +296,33 @@
 			try {
 				// Use current page's code block item
 				const siteName = siteId;
-				const collectionName = 'code-blocks';
+				const collectionName = 'code-blocks-v2';
 				const htmlCode = htmlEditor.getValue();
 				const cssCode = cssEditor.getValue();
+				// get assignedToPage and assignedToElement from currentCodeBlocks.data
+				const assignedToPage = currentCodeBlocks.data['assignedToPage'] || page;
+				const assignedToElement = currentCodeBlocks.data['assignedToElement'] || elementId;
 				if (!siteName) {
 					alert('Please enter a site name');
 					return;
 				}
+				console.log('Updating currentCodeBlocks', currentCodeBlocks);
 				// Create payload using existing item structure but update the HTML and CSS
 				let payload = currentCodeBlocks;
+				let currentAssignedPages = (currentCodeBlocks.data.assignedToPage).split(',') || [];
+				let currentAssignedElements = (currentCodeBlocks.data.assignedToElement).split(',') || [];
+				if (!currentAssignedPages.includes(page)) {
+					currentAssignedPages.push(page);
+				}
+				if (!currentAssignedElements.includes(elementId)) {
+					currentAssignedElements.push(elementId);
+				}		
 				payload.data = {
 					...currentCodeBlocks.data,
-					'editable1-html': htmlCode,
-					'editable1-css': cssCode,
+					'HTML': htmlCode,
+					'CSS': cssCode,
+					'assignedToPage': currentAssignedPages.join(','),
+					'assignedToElement': currentAssignedElements.join(',')
 				}
 				// {
 				// 	data: {
