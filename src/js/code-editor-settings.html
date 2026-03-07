@@ -88,6 +88,7 @@
 		let htmlEditor, cssEditor;
 		let collectionData = null; // Store loaded collection data
 		let currentCodeBlocks = null;
+		let previousCodeBlocks = null;
 
 		require(["vs/editor/editor.main"], function () {
 			console.log('🎨 Monaco loaded, creating editors...');
@@ -223,6 +224,16 @@
 					pageItemSelect.addEventListener('change', function() {
 						const selectedIndex = this.value;
 						if (selectedIndex && collectionData && collectionData.values) {
+							if(previousCodeBlocks) {
+								previousCodeBlocks = currentCodeBlocks; // Store previous before changing
+								//remove assigned element from previousCodeBlocks.data
+								if (previousCodeBlocks.data.assignedToElement) {
+									const assignedElements = previousCodeBlocks.data.assignedToElement.split(',').map(e => e.trim());
+									const updatedElements = assignedElements.filter(e => e !== elementId);
+									previousCodeBlocks.data.assignedToElement = updatedElements.join(',');
+									console.log('Updated previous code block to remove element assignment:', previousCodeBlocks);
+								}
+							}
 							currentCodeBlocks = collectionData.values[parseInt(selectedIndex)];
 							if (currentCodeBlocks && currentCodeBlocks.data) {
 								const htmlContent = currentCodeBlocks.data['HTML'] || '<!-- No HTML content found for this page item -->';
@@ -337,7 +348,7 @@
 					headers: {
 						'Content-Type': 'application/json'
 					},
-					body: JSON.stringify(payload)
+					body: JSON.stringify([previousCodeBlocks,payload])
 				});
 				if (!response.ok) {
 					const error = await response.text();

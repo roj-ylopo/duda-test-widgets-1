@@ -200,7 +200,7 @@ async function saveToCollection(siteName, collectionName, body) {
       // };
       console.log('Update payload:', body);
       
-      return await callDudaAPI('PUT', updatePath, [body]);
+      return await callDudaAPI('PUT', updatePath, body);
     }
 
     // Fallback: Get existing collection data to find if our item exists
