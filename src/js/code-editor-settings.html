@@ -201,8 +201,8 @@
 			collectionData = data; // Store for dropdown
 			
 			// Populate dropdown with page items
-			// const pageItemSelect = document.getElementById('page-item-select');
-			// pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
+			const pageItemSelect = document.getElementById('page-item-select');
+			pageItemSelect.innerHTML = '<option value="">Select a page item</option>';
 			
 			if (data && data.values && data.values.length > 0) {
 				console.log('Filtering items for current page:', page);
