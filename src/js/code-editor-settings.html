@@ -309,8 +309,8 @@
 				console.log('Updating currentCodeBlocks', currentCodeBlocks);
 				// Create payload using existing item structure but update the HTML and CSS
 				let payload = currentCodeBlocks;
-				let currentAssignedPages = (currentCodeBlocks.data.assignedToPage).split(',') || [];
-				let currentAssignedElements = (currentCodeBlocks.data.assignedToElement).split(',') || [];
+				let currentAssignedPages = (currentCodeBlocks.data.assignedToPage)?.split(',') || [];
+				let currentAssignedElements = (currentCodeBlocks.data.assignedToElement)?.split(',') || [];
 				if (!currentAssignedPages.includes(page)) {
 					currentAssignedPages.push(page);
 				}
