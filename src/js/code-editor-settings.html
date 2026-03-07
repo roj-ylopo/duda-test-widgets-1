@@ -207,11 +207,40 @@
 			if (data && data.values && data.values.length > 0) {
 				console.log('Filtering items for current page:', page);
 				console.log('All items:', data.values);
-				currentCodeBlocks = data.values.find(item => item.page_item_url === page);
+				currentCodeBlocks = data.values.find(item => item.data['assignedToPage'] === page && item.data['assignedToElement'] === elementId);
 				console.log('Filtered items for current page:', currentCodeBlocks);
+				//if currentCodeBlocks is still null or undefined, show a dropdown option to select from all items
+				if (!currentCodeBlocks) {
+					console.warn('⚠️ No code block found for current page and element. Showing dropdown to select from all items.');
+					currentCodeBlocks = data.values[0]; // Default to first item
+					data.values.forEach((item, index) => {
+						const option = document.createElement('option');
+						option.value = index;
+						option.textContent = item.page_item_url || `Item ${index + 1}`;
+						pageItemSelect.appendChild(option);
+					});
+					pageItemSelect.disabled = false;
+					pageItemSelect.addEventListener('change', function() {
+						const selectedIndex = this.value;
+						if (selectedIndex && collectionData && collectionData.values) {
+							currentCodeBlocks = collectionData.values[parseInt(selectedIndex)];
+							if (currentCodeBlocks && currentCodeBlocks.data) {
+								const htmlContent = currentCodeBlocks.data['HTML'] || '<!-- No HTML content found for this page item -->';
+								const cssContent = currentCodeBlocks.data['CSS'] || '/* No CSS content found for this page item */';
+								console.log('📝 Setting HTML content from dropdown:', htmlContent.substring(0, 100) + '...');
+								console.log('🎨 Setting CSS content from dropdown:', cssContent.substring(0, 100) + '...');
+								if (htmlEditor) htmlEditor.setValue(htmlContent);
+								if (cssEditor) cssEditor.setValue(cssContent);
+							} else {
+								alert('Selected item has no data');
+							}
+						}
+					});
+				}
+
 				if (htmlEditor && cssEditor) {
-					const htmlContent = currentCodeBlocks?.data['editable1-html'] || '<!-- No HTML content found for this page item -->';
-					const cssContent = currentCodeBlocks?.data['editable1-css'] || '/* No CSS content found for this page item */';
+					const htmlContent = currentCodeBlocks?.data['HTML'] || '<!-- No HTML content found for this page item -->';
+					const cssContent = currentCodeBlocks?.data['CSS'] || '/* No CSS content found for this page item */';
 					console.log('📝 Setting HTML content:', htmlContent.substring(0, 100) + '...');
 					console.log('🎨 Setting CSS content:', cssContent.substring(0, 100) + '...');
 					htmlEditor.setValue(htmlContent);
