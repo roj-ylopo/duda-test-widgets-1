@@ -224,16 +224,15 @@
 					pageItemSelect.addEventListener('change', function() {
 						const selectedIndex = this.value;
 						if (selectedIndex && collectionData && collectionData.values) {
-							if(previousCodeBlocks) {
-								previousCodeBlocks = currentCodeBlocks; // Store previous before changing
-								//remove assigned element from previousCodeBlocks.data
-								if (previousCodeBlocks.data.assignedToElement) {
-									const assignedElements = previousCodeBlocks.data.assignedToElement.split(',').map(e => e.trim());
-									const updatedElements = assignedElements.filter(e => e !== elementId);
-									previousCodeBlocks.data.assignedToElement = updatedElements.join(',');
-									console.log('Updated previous code block to remove element assignment:', previousCodeBlocks);
-								}
+							previousCodeBlocks = currentCodeBlocks; // Store previous before changing
+							//remove assigned element from previousCodeBlocks.data
+							if (previousCodeBlocks.data.assignedToElement) {
+								const assignedElements = previousCodeBlocks.data.assignedToElement.split(',').map(e => e.trim());
+								const updatedElements = assignedElements.filter(e => e !== elementId);
+								previousCodeBlocks.data.assignedToElement = updatedElements.join(',');
+								console.log('Updated previous code block to remove element assignment:', previousCodeBlocks);
 							}
+							
 							currentCodeBlocks = collectionData.values[parseInt(selectedIndex)];
 							if (currentCodeBlocks && currentCodeBlocks.data) {
 								const htmlContent = currentCodeBlocks.data['HTML'] || '<!-- No HTML content found for this page item -->';
